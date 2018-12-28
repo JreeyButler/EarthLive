@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="data_from_values">
+        <item>@string/value_japan</item>
+        <item>@string/value_china</item>
+        <!--<item>@string/value_usa</item>-->
+    </string-array>
+
+    <string-array name="data_from_entries">
+        <item>@string/japan</item>
+        <item>@string/china</item>
+        <!--<item>@string/usa</item>-->
+    </string-array>
+
+    <string-array name="update_cycle_values">
+        <item>@string/value_10_minus</item>
+        <item>@string/value_30_minus</item>
+        <item>@string/value_60_minus</item>
+    </string-array>
+    <string-array name="update_cycle_entries">
+        <item>@string/minus_10</item>
+        <item>@string/minus_30</item>
+        <item>@string/minus_60</item>
+    </string-array>
+
+    <string-array name="wallpaper_size_values">
+        <item>@string/value_720p</item>
+        <item>@string/value_1080p</item>
+    </string-array>
+    <string-array name="wallpaper_size_entries">
+        <item>@string/size_720p</item>
+        <item>@string/size_1080p</item>
+    </string-array>
+</resources>

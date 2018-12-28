@@ -1,0 +1,45 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Earth Live</string>
+    <string name="change_wallpaper">change wallpaper</string>
+    <string name="test_display">Test display</string>
+    <string name="set_wallpaper">Set Wallpaper</string>
+    <string name="no_update">"Wallpaper is latest."</string>
+
+    <string name="setting">Settings</string>
+    <string name="about">About</string>
+    <string name="open_source">Open source</string>
+
+    <string name="setting_wallpaper">"Wallpaper"</string>
+    <string name="data_from">Data from</string>
+    <string name="wallpaper_size">Wallpaper size</string>
+    <string name="update_cycle">Update cycle</string>
+    <string name="other">Other</string>
+    <string name="japan">Himawari 8(Japan)</string>
+    <string name="china">FY-4A(China)</string>
+    <string name="usa">GOES-17(USA)</string>
+    <string name="minus_10">10 minus</string>
+    <string name="minus_30">30 minus</string>
+    <string name="minus_60">1 hour</string>
+    <string name="size_1080p">1920*1080</string>
+    <string name="size_720p">1280*720</string>
+    <string name="expected_data_traffic">Expected data traffic consumption per hour</string>
+    <string name="check_update">Check update</string>
+
+    <string name="value_japan" translatable="false">1</string>
+    <string name="value_china" translatable="false">2</string>
+    <string name="value_usa" translatable="false">3</string>
+    <string name="value_10_minus" translatable="false">10</string>
+    <string name="value_30_minus" translatable="false">30</string>
+    <string name="value_60_minus" translatable="false">60</string>
+    <string name="value_720p" translatable="false">720</string>
+    <string name="value_1080p" translatable="false">1080</string>
+    <string name="notification_title">Earth live is running</string>
+    <string name="notification_message">Data from:<xliff:g id="from">%s</xliff:g>.Update:<xliff:g id="cycle">%s</xliff:g></string>
+    <string name="automatic_update">Automatic update wallpaper</string>
+    <string name="wifi_only">Wi-Fi only</string>
+    <string name="network_summary">Automatically update wallpapers only under Wi-Fi</string>
+    <string name="unknown">Unknown</string>
+    <string name="network_error">The network is abnormal and cannot update the wallpaper.</string>
+    <string name="auto_help">Add apps to the whitelist and keep updating the wallpaper automatically.</string>
+
+</resources>

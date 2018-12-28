@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory android:title="@string/setting_wallpaper">
+
+        <ListPreference
+            android:entries="@array/data_from_entries"
+            android:entryValues="@array/data_from_values"
+            android:key="data_from"
+            android:title="@string/data_from" />
+
+        <ListPreference
+            android:entries="@array/wallpaper_size_entries"
+            android:entryValues="@array/wallpaper_size_values"
+            android:key="wallpaper_size"
+            android:title="@string/wallpaper_size" />
+
+        <SwitchPreference
+            android:key="auto_update"
+            android:title="@string/automatic_update" />
+
+        <SwitchPreference
+            android:key="wifi_only"
+            android:title="@string/network_summary" />
+
+        <ListPreference
+            android:entries="@array/update_cycle_entries"
+            android:entryValues="@array/update_cycle_values"
+            android:key="update_cycle"
+            android:title="@string/update_cycle" />
+
+        <PreferenceScreen
+            android:key="expected_data_traffic"
+            android:title="@string/expected_data_traffic" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/other">
+        <PreferenceScreen
+            android:key="open_source"
+            android:title="@string/open_source" />
+        <PreferenceScreen
+            android:key="check_update"
+            android:title="@string/check_update" />
+    </PreferenceCategory>
+</PreferenceScreen>

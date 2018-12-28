@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="size_normal_font">16sp</dimen>
+    <dimen name="size_small">6dp</dimen>
+    <dimen name="size_normal">12dp</dimen>
+    <dimen name="size_large">24dp</dimen>
+    <dimen name="size_renew_size">48dp</dimen>
+    <dimen name="size_about_icon">64dp</dimen>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 默认：不启用自动更新 -->
+    <bool name="config_auto_update">false</bool>
+    <!-- 默认：向日葵8号 -->
+    <string name="config_data_from" translatable="false">@string/value_japan</string>
+    <!-- 默认：720P -->
+    <string name="config_wallpaper_size" translatable="false">@string/value_720p</string>
+    <!-- 默认：10分钟 -->
+    <string name="config_update_cycle" translatable="false">@string/value_10_minus</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">地球时刻</string>
+    <string name="change_wallpaper">设置壁纸</string>
+    <string name="test_display">测试显示</string>
+    <string name="set_wallpaper">设置为壁纸</string>
+    <string name="no_update">壁纸已是最新，无需更新</string>
+    <string name="setting">设置</string>
+    <string name="about">关于</string>
+    <string name="open_source">开源协议</string>
+    <string name="setting_wallpaper">壁纸</string>
+    <string name="data_from">数据来源</string>
+    <string name="wallpaper_size">壁纸尺寸</string>
+    <string name="update_cycle">更新周期</string>
+    <string name="other">其他</string>
+    <string name="china">风云4号-A（中国）</string>
+    <string name="japan">向日葵8号（日本）</string>
+    <string name="usa">GOES-17（美国）</string>
+    <string name="minus_10">10分钟</string>
+    <string name="minus_30">30分钟</string>
+    <string name="minus_60">1小时</string>
+    <string name="size_1080p">1920*1080</string>
+    <string name="size_720p">1280*720</string>
+    <string name="expected_data_traffic">预计每小时消耗流量</string>
+    <string name="check_update">检查更新</string>
+    <string name="notification_title">地球时刻正在运行</string>
+    <string name="notification_message">数据来源：<xliff:g id="from">%s</xliff:g>,更新周期：<xliff:g id="cycle">%s</xliff:g></string>
+    <string name="automatic_update">自动更新壁纸</string>
+    <string name="wifi_only">仅使用Wi-Fi</string>
+    <string name="network_summary">仅在Wi-Fi网络下自动更新壁纸</string>
+    <string name="unknown">未知</string>
+    <string name="network_error">网络异常，无法更新壁纸</string>
+    <string name="auto_help">建议将应用加入白名单，保持后台自动更新壁纸。</string>
+</resources>
