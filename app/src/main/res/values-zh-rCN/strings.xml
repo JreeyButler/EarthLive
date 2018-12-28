@@ -31,4 +31,5 @@
     <string name="unknown">未知</string>
     <string name="network_error">网络异常，无法更新壁纸</string>
     <string name="auto_help">建议将应用加入白名单，保持后台自动更新壁纸。</string>
+
 </resources>

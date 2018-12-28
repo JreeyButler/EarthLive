@@ -101,6 +101,7 @@ public class Settings extends PreferenceActivity
         mDataFrom.setOnPreferenceClickListener(this);
         mWallpaperSize.setOnPreferenceClickListener(this);
         mUpdateCycle.setOnPreferenceClickListener(this);
+        mOpenSource.setOnPreferenceClickListener(this);
 
         mWifiOnly.setShouldDisableView(true);
         mUpdateCycle.setShouldDisableView(true);
@@ -217,6 +218,8 @@ public class Settings extends PreferenceActivity
             switchPreference.setChecked(isAuto);
             filterAutoPreference(isAuto);
             Tools.setBooleanSharePreference(mContext, key, isAuto);
+        } else if (Key.KEY_OPEN_SOURCE.equals(key)) {
+            mContext.startActivity(new Intent(this, OpenSourceActivity.class));
         }
         return false;
     }
