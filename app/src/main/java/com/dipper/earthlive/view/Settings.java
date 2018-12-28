@@ -1,6 +1,7 @@
 package com.dipper.earthlive.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 
 import com.dipper.earthlive.R;
 import com.dipper.earthlive.notification.BaseNotification;
+import com.dipper.earthlive.util.Constants;
 import com.dipper.earthlive.util.Tools;
 
 import java.util.Objects;
@@ -133,8 +135,11 @@ public class Settings extends PreferenceActivity
             } else if (value.equals(mContext.getResources().getString(R.string.value_usa))) {
                 mDataFrom.setSummary(R.string.usa);
             }
-            // 更新通知栏
-            updateNotification();
+            // 更新壁纸
+            if (mAutoUpdate.isChecked()) {
+                updateWallpaper();
+            }
+
         } else if (Key.KEY_WALLPAPER_SIZE.equals(key)) {
             if (value.equals(mContext.getResources().getString(R.string.value_720p))) {
                 mWallpaperSize.setSummary(R.string.size_720p);
@@ -151,18 +156,17 @@ public class Settings extends PreferenceActivity
                 mUpdateCycle.setSummary(R.string.minus_60);
             }
             calculateData(mWallpaperSize.getValue(), value);
-            // 更新通知栏
-            updateNotification();
+            // 更新壁纸
+            if (mAutoUpdate.isChecked()) {
+                updateWallpaper();
+            }
         }
         Tools.setStringSharePreference(mContext, key, value);
         return true;
     }
 
-    private void updateNotification() {
-        if (!mAutoUpdate.isChecked()) {
-            return;
-        }
-        new BaseNotification(mContext).showNotification(null);
+    private void updateWallpaper() {
+        mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_WALLPAPER));
     }
 
     /**

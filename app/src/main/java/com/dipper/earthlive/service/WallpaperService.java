@@ -88,6 +88,7 @@ public class WallpaperService extends Service {
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
         intentFilter.addAction(Constants.ACTION_RENEW_WALLPAPER);
+        intentFilter.addAction(Constants.ACTION_UPDATE_WALLPAPER);
         registerReceiver(mReceiver, intentFilter);
     }
 
@@ -231,6 +232,9 @@ public class WallpaperService extends Service {
                     return;
                 }
                 noUpdate();
+            } else if (Constants.ACTION_UPDATE_WALLPAPER.equals(action)) {
+                latestTime = Tools.getLatestPictureTime();
+                updateWallpaper();
             }
         }
     };
@@ -299,7 +303,9 @@ public class WallpaperService extends Service {
             setLatestTime(latestTime);
             saveLastUpdateTime();
             mContext.sendBroadcast(new Intent(Constants.ACTION_CHANGE_WALLPAPER_SUCCESS));
-
+            if (isAutoUpdate()){
+                showNotification(null);
+            }
         }
 
         @Override
@@ -328,7 +334,7 @@ public class WallpaperService extends Service {
         }
         manager.setBitmap(wallpaper);
     }
-    
+
     private void setLatestTime(String time) {
         time = time == null ? "" : time;
         Tools.setStringSharePreference(mContext, Constants.KEY_LATEST_PICTURE_TIME, time);
@@ -407,6 +413,5 @@ public class WallpaperService extends Service {
         }
         return Constants.PictureUrl.JAPAN_NORMAL_URL + Tools.getLatestPictureTime();
     }
-
 }
 
