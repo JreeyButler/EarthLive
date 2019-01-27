@@ -34,6 +34,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.Size;
+import android.widget.Toast;
 
 import com.dipper.earthlive.R;
 import com.dipper.earthlive.notification.BaseNotification;
@@ -96,25 +97,10 @@ public class WallpaperService extends Service {
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
 
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-
+        intentFilter.addAction(Constants.ACTION_SET_WALLPAPER);
         intentFilter.addAction(Constants.ACTION_RENEW_WALLPAPER);
         intentFilter.addAction(Constants.ACTION_UPDATE_WALLPAPER);
         registerReceiver(mReceiver, intentFilter);
-    }
-
-    private void setLockWallpaper(int resId) {
-        // 获取类名
-        Class class1 = manager.getClass();
-        try {
-            // 获取设置锁屏壁纸的函数
-            Method setWallPaperMethod = class1.getMethod("setBitmapToLockWallpaper", Bitmap.class);
-            // 调用锁屏壁纸的函数
-            setWallPaperMethod.invoke(manager, BitmapFactory.decodeResource(getResources(), resId));
-            Log.d(TAG, "setLockWallpaper: set lock wallpaper success!");
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            Log.e(TAG, "setLockWallpaper: set lock wallpaper failed", e);
-            e.printStackTrace();
-        }
     }
 
     @Nullable
@@ -140,9 +126,7 @@ public class WallpaperService extends Service {
         if (mNotification == null) {
             mNotification = new BaseNotification(mContext);
         }
-        if (!isAutoUpdate()) {
-            mNotification.cancelNotification();
-        }
+        mNotification.cancelNotification();
         if (mReceiver != null) {
             mContext.unregisterReceiver(mReceiver);
         }
@@ -245,6 +229,14 @@ public class WallpaperService extends Service {
             } else if (Constants.ACTION_UPDATE_WALLPAPER.equals(action)) {
                 latestTime = Tools.getLatestPictureTime();
                 updateWallpaper();
+            } else if (Constants.ACTION_SET_WALLPAPER.equals(action)) {
+                try {
+                    setHomeWallpaper();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(mContext, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
+                }
+                Toast.makeText(mContext, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -252,7 +244,7 @@ public class WallpaperService extends Service {
     private void updateWallpaper() {
         Log.d(TAG, "updateWallpaper: ");
         String url = getPictureUrls();
-        if (url == null || "".equals(url)) {
+        if ("".equals(url)) {
             return;
         }
         // 正在下载
@@ -299,9 +291,10 @@ public class WallpaperService extends Service {
                 mContext.sendBroadcast(new Intent(Constants.ACTION_WALLPAPER_DOWNLOAD_FAILED));
                 return;
             }
-            Tools.generateWallpaper(getWallpaperSize());
             try {
-                setHomeWallpaper();
+                if (isAutoUpdate()) {
+                    setHomeWallpaper();
+                }
                 successCount = 0;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -333,6 +326,7 @@ public class WallpaperService extends Service {
      * @throws IOException
      */
     private void setHomeWallpaper() throws IOException {
+        Tools.generateWallpaper(getWallpaperSize());
         Bitmap wallpaper = BitmapFactory.decodeFile(Constants.WALLPAPER_PATH);
         if (wallpaper == null) {
             Log.d(TAG, "setHomeWallpaper: wallpaper is null");
@@ -400,25 +394,6 @@ public class WallpaperService extends Service {
             return Constants.PictureUrl.TEST_URL + Constants.JAPAN_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
         }
         return Constants.PictureUrl.TEST_URL + Constants.JAPAN_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
-    }
-
-    /**
-     * 通过用户设置的数据来源获取API
-     *
-     * @return data api
-     */
-    private String getApi() {
-        String dataFrom = Tools.getStringSharePreference(mContext, Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
-
-        if (dataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
-            return Constants.PictureUrl.JAPAN_NORMAL_URL;
-        } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_china))) {
-            return Constants.PictureUrl.CHINA_URL;
-        } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_usa))) {
-            // 暂时先返回日本的节点
-            return Constants.PictureUrl.JAPAN_NORMAL_URL;
-        }
-        return Constants.PictureUrl.JAPAN_NORMAL_URL;
     }
 }
 

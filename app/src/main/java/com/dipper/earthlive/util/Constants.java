@@ -53,6 +53,7 @@ public class Constants {
     public static final String ACTION_WALLPAPER_DOWNLOAD_FAILED = "wallpaper_download_failed";
     public static final String ACTION_RENEW_WALLPAPER = "renew_wallpaper";
     public static final String ACTION_UPDATE_WALLPAPER = "update_wallpaper";
+    public static final String ACTION_SET_WALLPAPER = "set_wallpaper";
     public static final String DATE_FORMAT = "HH:mm";
     public static final String DATE_FORMAT_1 = "yyyy/MM/dd";
     public static final String DEFAULT_PICTURE_STUFF = ".png";

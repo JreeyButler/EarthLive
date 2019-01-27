@@ -19,6 +19,7 @@ package com.dipper.earthlive.view;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,6 +27,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,6 +44,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -54,6 +58,7 @@ import com.dipper.earthlive.util.Tools;
 
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Dipper
@@ -115,12 +120,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
         super.onDestroy();
         unregisterReceiver(receiver);
         if (isServiceConnected) {
             unbindService(connection);
         }
         if (!isAutoUpdate()) {
+            Log.d(TAG, "onDestroy: stop service");
             stopService(new Intent(this, WallpaperService.class));
         }
     }
@@ -200,7 +207,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.set_wallpaper:
-
+                mContext.sendBroadcast(new Intent(Constants.ACTION_SET_WALLPAPER));
                 break;
             case R.id.renew:
                 Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate);

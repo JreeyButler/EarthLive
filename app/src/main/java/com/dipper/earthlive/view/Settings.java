@@ -30,6 +30,7 @@ import android.view.MenuItem;
 
 import com.dipper.earthlive.R;
 import com.dipper.earthlive.notification.BaseNotification;
+import com.dipper.earthlive.service.WallpaperService;
 import com.dipper.earthlive.util.Constants;
 import com.dipper.earthlive.util.Tools;
 
@@ -249,6 +250,9 @@ public class Settings extends PreferenceActivity
             switchPreference.setChecked(isAuto);
             filterAutoPreference(isAuto);
             Tools.setBooleanSharePreference(mContext, key, isAuto);
+            if (isAuto) {
+                startService(new Intent(mContext, WallpaperService.class));
+            }
         } else if (Key.KEY_OPEN_SOURCE.equals(key)) {
             mContext.startActivity(new Intent(this, OpenSourceActivity.class));
         }
@@ -268,6 +272,9 @@ public class Settings extends PreferenceActivity
             notification.cancelNotification();
             mAutoUpdate.setSummary("");
             mDataTraffic.setSummary("");
+        }
+        if (mDataFrom.getValue() == null || "".equals(mDataFrom.getValue())) {
+            return;
         }
         if (mDataFrom.getValue().equals(mContext.getResources().getString(R.string.value_japan))) {
             mUpdateCycle.setEntryValues(R.array.jp_update_cycle_values);

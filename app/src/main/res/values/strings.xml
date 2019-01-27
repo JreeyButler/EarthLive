@@ -41,6 +41,8 @@
     <string name="unknown">Unknown</string>
     <string name="network_error">The network is abnormal and cannot update the wallpaper.</string>
     <string name="auto_help">Add apps to the whitelist and keep updating the wallpaper automatically.</string>
+    <string name="set_wallpaper_success">Set wallpaper successfully</string>
+    <string name="set_wallpaper_fail">Set wallpaper fail</string>
 
     <string name="source" translatable="false">
 Copyright © 2018 Dipper\n
