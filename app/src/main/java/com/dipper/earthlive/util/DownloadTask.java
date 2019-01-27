@@ -16,6 +16,8 @@
 
 package com.dipper.earthlive.util;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -65,20 +67,21 @@ public class DownloadTask implements Runnable {
             if (inputStream != null) {
                 try {
                     inputStream.close();
+                    mCallback.downloadSucceed(fileName);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    mCallback.downloadFailed(fileName);
                 }
             }
-            mCallback.downloadSucceed(fileName);
         }
     }
 
     private String getFileName() {
-        final String flag = "_";
+        final String flag = "/";
         if (url == null || "".equals(url)) {
             return "";
         }
-        int index = url.indexOf(flag);
+        int index = url.lastIndexOf(flag);
         return url.substring(index + 1, url.length());
     }
 

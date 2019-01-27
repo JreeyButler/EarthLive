@@ -174,7 +174,7 @@ public class WallpaperService extends Service {
     private boolean checkUpdateTime() {
         nowTime = System.currentTimeMillis();
         long realLatestTime = getRealUpdateTime();
-        String temp = Tools.getStringSharePreference(mContext, Constants.Key.KEY_UPDATE_CYCLE, mContext.getResources().getString(R.string.config_update_cycle));
+        String temp = Tools.getStringSharePreference(mContext, Constants.Key.KEY_UPDATE_CYCLE, mContext.getResources().getString(R.string.config_jp_update_cycle));
         long cycle = Long.valueOf(temp) * 60 * 1000;
         Log.d(TAG, "checkUpdateTime: cycle = " + cycle + ", now = " + (nowTime - realLatestTime));
         return ((nowTime - realLatestTime) >= cycle);
@@ -251,8 +251,8 @@ public class WallpaperService extends Service {
 
     private void updateWallpaper() {
         Log.d(TAG, "updateWallpaper: ");
-        String[] urls = getPictureUrls();
-        if (urls == null) {
+        String url = getPictureUrls();
+        if (url == null || "".equals(url)) {
             return;
         }
         // 正在下载
@@ -267,9 +267,7 @@ public class WallpaperService extends Service {
             return;
         }
         // 下载图片
-        for (String url : urls) {
-            startDownload(url);
-        }
+        startDownload(url);
     }
 
     private void startDownload(String url) {
@@ -289,7 +287,6 @@ public class WallpaperService extends Service {
             downloadCount++;
             successCount++;
             Log.d(TAG, "downloadSucceed: fileName = " + fileName);
-            Log.d(TAG, "downloadSucceed: downloadCount = " + downloadCount + ",successCount = " + successCount);
             // 没下载完成，继续下载
             if (downloadCount < Constants.SIZE_WALLPAPER) {
                 return;
@@ -302,7 +299,6 @@ public class WallpaperService extends Service {
                 mContext.sendBroadcast(new Intent(Constants.ACTION_WALLPAPER_DOWNLOAD_FAILED));
                 return;
             }
-
             Tools.generateWallpaper(getWallpaperSize());
             try {
                 setHomeWallpaper();
@@ -313,7 +309,7 @@ public class WallpaperService extends Service {
             setLatestTime(latestTime);
             saveLastUpdateTime();
             mContext.sendBroadcast(new Intent(Constants.ACTION_CHANGE_WALLPAPER_SUCCESS));
-            if (isAutoUpdate()){
+            if (isAutoUpdate()) {
                 showNotification(null);
             }
         }
@@ -392,18 +388,18 @@ public class WallpaperService extends Service {
      *
      * @return 图片地址
      */
-    private String[] getPictureUrls() {
-        String api = getApi();
-        String[] urls = new String[Constants.SIZE_WALLPAPER];
-        int index = 0;
-        for (int i = 0; i < Constants.DEFAULT_SIZE; i++) {
-            for (int j = 0; j < Constants.DEFAULT_SIZE; j++) {
-                urls[index] = api + "_" + i + "_" + j + Constants.DEFAULT_PICTURE_STUFF;
-                index++;
-            }
+    private String getPictureUrls() {
+        String dataFrom = Tools.getStringSharePreference(mContext, Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
+
+        if (dataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
+            return Constants.PictureUrl.TEST_URL + Constants.JAPAN_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
+        } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_china))) {
+            return Constants.PictureUrl.TEST_URL + Constants.CHINA_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
+        } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_usa))) {
+            // 暂时先返回日本的节点
+            return Constants.PictureUrl.TEST_URL + Constants.JAPAN_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
         }
-        Log.d(TAG, "getPictureUrls: urls size = " + urls.length);
-        return urls;
+        return Constants.PictureUrl.TEST_URL + Constants.JAPAN_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
     }
 
     /**
@@ -413,15 +409,16 @@ public class WallpaperService extends Service {
      */
     private String getApi() {
         String dataFrom = Tools.getStringSharePreference(mContext, Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
+
         if (dataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
-            return Constants.PictureUrl.JAPAN_NORMAL_URL + Tools.getLatestPictureTime();
+            return Constants.PictureUrl.JAPAN_NORMAL_URL;
         } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_china))) {
-            return Constants.PictureUrl.CHINA_URL + Constants.TEST_PICTURE_NAME;
+            return Constants.PictureUrl.CHINA_URL;
         } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_usa))) {
             // 暂时先返回日本的节点
-            return Constants.PictureUrl.JAPAN_NORMAL_URL + Tools.getLatestPictureTime();
+            return Constants.PictureUrl.JAPAN_NORMAL_URL;
         }
-        return Constants.PictureUrl.JAPAN_NORMAL_URL + Tools.getLatestPictureTime();
+        return Constants.PictureUrl.JAPAN_NORMAL_URL;
     }
 }
 

@@ -202,11 +202,13 @@ public class Tools {
     }
 
     public static void generateWallpaper(Size size) {
+        Log.d(TAG, "generateWallpaper: 13");
         if (!isPictureExists()) {
-            return;
+            Log.e(TAG, "generateWallpaper: picture not exists or open failed.");
+            throw new RuntimeException("picture not exists or open failed.");
         }
-        Bitmap bitmap00 = BitmapFactory.decodeFile(Constants.PICTURE_DIR_PATH + Constants.PICTURE_0_0);
-
+        Log.d(TAG, "generateWallpaper: picture exists ");
+        Bitmap bitmap00 = BitmapFactory.decodeFile(Constants.PICTURE_DIR_PATH + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF);
         Bitmap bitmap = Bitmap.createBitmap(size.getWidth(), size.getHeight(), Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(Color.BLACK);
@@ -269,12 +271,12 @@ public class Tools {
     }
 
     /**
-     * 检查下载的壁纸是否存在
+     * 检查下载的图片是否存在
      *
      * @return true：有壁纸；false：无壁纸
      */
-    public static boolean isPictureExists() {
-        File picture00 = new File(Constants.PICTURE_DIR_PATH + Constants.PICTURE_0_0);
+    private static boolean isPictureExists() {
+        File picture00 = new File(Constants.PICTURE_DIR_PATH + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF);
         return picture00.exists();
     }
 

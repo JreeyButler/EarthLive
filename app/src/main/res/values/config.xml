@@ -7,5 +7,7 @@
     <!-- 默认：720P -->
     <string name="config_wallpaper_size" translatable="false">@string/value_720p</string>
     <!-- 默认：10分钟 -->
-    <string name="config_update_cycle" translatable="false">@string/value_10_minus</string>
+    <string name="config_jp_update_cycle" translatable="false">@string/value_10_minus</string>
+    <!-- FY-4A 默认更新时间:60分钟 -->
+    <string name="config_cn_update_cycle" translatable="false">@string/value_60_minus</string>
 </resources>

@@ -56,11 +56,12 @@ public class Constants {
     public static final String DATE_FORMAT = "HH:mm";
     public static final String DATE_FORMAT_1 = "yyyy/MM/dd";
     public static final String DEFAULT_PICTURE_STUFF = ".png";
+    public static final String NORMAL_PICTURE_STUFF = ".jpg";
     public static final String KEY_LATEST_PICTURE_TIME = "key_latest_picture_time";
     public static final String KEY_PICTURE_DOWNLOADED = "key_picture_downloaded";
     public static final String KEY_LATEST_UPDATE_TIME = "latest_update_time";
     public static final String TEST_PICTURE_NAME = "default";
-
+//    public static final String FY_4A_PICTURE_NAME = "FY-4A";
 
     private static final String APPLICATION_NAME = "EarthLive";
     private static final String PICTURE_DIR_NAME = "Picture";
@@ -78,13 +79,17 @@ public class Constants {
     public static final String PICTURE_1_1 = "1_1" + DEFAULT_PICTURE_STUFF;
 
     public static final String WALLPAPER_PATH = WALLPAPER_DIR_PATH + WALLPAPER_NAME + DEFAULT_PICTURE_STUFF;
-    public static final String PICTURE_PATH = PICTURE_DIR_PATH + PICTURE_0_0;
+    //    public static final String PICTURE_PATH = PICTURE_DIR_PATH + PICTURE_0_0;
+    public static final String JAPAN_NAME = "himawari8";
+    public static final String CHINA_NAME = "fy4a";
+    public static final String DEFAULT_NAME = "default";
 
 
     public static class PictureUrl {
         public static final String JAPAN_HD_URL = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/2d/550/";
         public static final String JAPAN_NORMAL_URL = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/1d/550/";
         public static final String CHINA_URL = "https://www.suansuanru.club/img/";
+        public static final String TEST_URL = "http://192.168.31.245/img/";
         public static final String USA_URL = "";
     }
 

@@ -91,7 +91,7 @@ public class Settings extends PreferenceActivity
         }
         if (mUpdateCycle.getValue() == null || "".equals(mUpdateCycle.getValue())) {
             int index = getIndexFromValue(mUpdateCycle.getKey(),
-                    mContext.getResources().getString(R.string.config_update_cycle));
+                    mContext.getResources().getString(R.string.config_jp_update_cycle));
             mUpdateCycle.setValueIndex(index);
             mUpdateCycle.setSummary(getSummaryFromIndex(mUpdateCycle.getKey(), index));
         } else {
@@ -144,19 +144,28 @@ public class Settings extends PreferenceActivity
         String key = preference.getKey();
         key = key == null ? "" : key;
         String value = String.valueOf(o);
+
         if (Key.KEY_DATA_FROM.equals(key)) {
+            String cycle = mContext.getResources().getString(R.string.config_jp_update_cycle);
             if (value.equals(mContext.getResources().getString(R.string.value_japan))) {
                 mDataFrom.setSummary(R.string.japan);
+                mUpdateCycle.setEntries(R.array.jp_update_cycle_entries);
+                mUpdateCycle.setEntryValues(R.array.jp_update_cycle_values);
+                cycle = mContext.getResources().getString(R.string.config_jp_update_cycle);
             } else if (value.equals(mContext.getResources().getString(R.string.value_china))) {
                 mDataFrom.setSummary(R.string.china);
+                mUpdateCycle.setEntries(R.array.cn_update_cycle_entries);
+                mUpdateCycle.setEntryValues(R.array.cn_update_cycle_values);
+                cycle = mContext.getResources().getString(R.string.config_cn_update_cycle);
+                Log.d(TAG, "onPreferenceChange: 123");
             } else if (value.equals(mContext.getResources().getString(R.string.value_usa))) {
                 mDataFrom.setSummary(R.string.usa);
             }
             // 更新壁纸
-            if (mAutoUpdate.isChecked()) {
-                updateWallpaper();
-            }
-
+//            if (mAutoUpdate.isChecked()) {
+            updateWallpaper();
+//            }
+            updateCycle(cycle);
         } else if (Key.KEY_WALLPAPER_SIZE.equals(key)) {
             if (value.equals(mContext.getResources().getString(R.string.value_720p))) {
                 mWallpaperSize.setSummary(R.string.size_720p);
@@ -184,6 +193,12 @@ public class Settings extends PreferenceActivity
 
     private void updateWallpaper() {
         mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_WALLPAPER));
+    }
+
+    private void updateCycle(String value) {
+        mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), value));
+        mUpdateCycle.setValue(value);
+        Tools.setStringSharePreference(mContext, mUpdateCycle.getKey(), value);
     }
 
     /**
@@ -253,6 +268,13 @@ public class Settings extends PreferenceActivity
             notification.cancelNotification();
             mAutoUpdate.setSummary("");
             mDataTraffic.setSummary("");
+        }
+        if (mDataFrom.getValue().equals(mContext.getResources().getString(R.string.value_japan))) {
+            mUpdateCycle.setEntryValues(R.array.jp_update_cycle_values);
+            mUpdateCycle.setEntries(R.array.jp_update_cycle_entries);
+        } else if (mDataFrom.getValue().equals(mContext.getResources().getString(R.string.value_china))) {
+            mUpdateCycle.setEntries(R.array.cn_update_cycle_entries);
+            mUpdateCycle.setEntryValues(R.array.cn_update_cycle_values);
         }
     }
 

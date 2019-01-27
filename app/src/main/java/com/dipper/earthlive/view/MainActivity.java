@@ -169,12 +169,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Log.d(TAG, "renewWallpaper: wallpaper exists = " + Tools.isWallpaperExists());
         if (Tools.isWallpaperExists()) {
             Glide.with(mContext)
-                    .load(new File(Constants.PICTURE_PATH))
+                    .load(new File(Constants.PICTURE_DIR_PATH + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF))
                     .apply(requestOptions)
                     .into(wallpaper);
         } else {
             Glide.with(mContext).load(R.drawable.defaula_wallpaper_japan).into(wallpaper);
         }
+    }
+
+    /**
+     * 获取本地下载图片位置
+     *
+     * @return 图片位置
+     */
+    private String getPicturePath() {
+        String dataFrom = Tools.getStringSharePreference(mContext, Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
+
+        if (dataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
+            return Constants.PICTURE_DIR_PATH + Constants.JAPAN_NAME + Constants.DEFAULT_PICTURE_STUFF;
+        } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_china))) {
+            return Constants.PICTURE_DIR_PATH + Constants.CHINA_NAME + Constants.NORMAL_PICTURE_STUFF;
+        } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_usa))) {
+            // 暂时先返回日本的节点
+            return Constants.PICTURE_DIR_PATH + Constants.JAPAN_NAME + Constants.DEFAULT_PICTURE_STUFF;
+        }
+        return Constants.PictureUrl.JAPAN_NORMAL_URL + Tools.getLatestPictureTime();
     }
 
     @Override

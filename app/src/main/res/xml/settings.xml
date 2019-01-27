@@ -25,8 +25,8 @@
             android:title="@string/network_summary" />
 
         <ListPreference
-            android:entries="@array/update_cycle_entries"
-            android:entryValues="@array/update_cycle_values"
+            android:entries="@array/jp_update_cycle_entries"
+            android:entryValues="@array/jp_update_cycle_values"
             android:key="update_cycle"
             android:title="@string/update_cycle" />
 
