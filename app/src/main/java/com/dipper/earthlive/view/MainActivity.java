@@ -102,7 +102,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void initService() {
-        if (!Tools.isServiceRunning(mContext, "com.dipper.earthlive.service.WallpaperService")) {
+        if (!Tools.isServiceRunning(mContext, WallpaperService.class.getName()) && isAutoUpdate()) {
+            startService(new Intent(mContext, WallpaperService.class));
+        } else {
             bindService(new Intent(mContext, WallpaperService.class), connection, Context.BIND_AUTO_CREATE);
         }
     }
