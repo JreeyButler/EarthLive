@@ -91,13 +91,14 @@ public class Settings extends PreferenceActivity
             mWallpaperSize.setSummary(getSummaryFromValue(mWallpaperSize.getKey(), mWallpaperSize.getValue()));
         }
         if (mUpdateCycle.getValue() == null || "".equals(mUpdateCycle.getValue())) {
-            int index = getIndexFromValue(mUpdateCycle.getKey(),
-                    mContext.getResources().getString(R.string.config_jp_update_cycle));
-            mUpdateCycle.setValueIndex(index);
-            mUpdateCycle.setSummary(getSummaryFromIndex(mUpdateCycle.getKey(), index));
-        } else {
+            String value = mContext.getResources().getString(R.string.config_jp_update_cycle);
+            Log.d(TAG, "initDefaultValue: value = " + value);
+            mUpdateCycle.setValue(value);
+        }
+        if (mAutoUpdate.isChecked()) {
             mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), mUpdateCycle.getValue()));
         }
+
     }
 
     private void initView() {
@@ -172,22 +173,24 @@ public class Settings extends PreferenceActivity
             updateWallpaper();
 //            }
             updateCycle(cycle);
+            calculateDataTraffic(mWallpaperSize.getValue(), cycle);
         } else if (Key.KEY_WALLPAPER_SIZE.equals(key)) {
             if (value.equals(mContext.getResources().getString(R.string.value_720p))) {
                 mWallpaperSize.setSummary(R.string.size_720p);
             } else if (value.equals(mContext.getResources().getString(R.string.value_1080p))) {
                 mWallpaperSize.setSummary(R.string.size_1080p);
             }
-            calculateData(value, mUpdateCycle.getValue());
+            calculateDataTraffic(value, mUpdateCycle.getValue());
         } else if (Key.KEY_UPDATE_CYCLE.equals(key)) {
-            if (value.equals(mContext.getResources().getString(R.string.value_10_minus))) {
-                mUpdateCycle.setSummary(R.string.minus_10);
-            } else if (value.equals(mContext.getResources().getString(R.string.value_30_minus))) {
-                mUpdateCycle.setSummary(R.string.minus_30);
-            } else if (value.equals(mContext.getResources().getString(R.string.value_60_minus))) {
-                mUpdateCycle.setSummary(R.string.minus_60);
-            }
-            calculateData(mWallpaperSize.getValue(), value);
+            mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), value));
+//            if (value.equals(mContext.getResources().getString(R.string.value_10_minus))) {
+//                mUpdateCycle.setSummary(R.string.minus_10);
+//            } else if (value.equals(mContext.getResources().getString(R.string.value_30_minus))) {
+//                mUpdateCycle.setSummary(R.string.minus_30);
+//            } else if (value.equals(mContext.getResources().getString(R.string.value_60_minus))) {
+//                mUpdateCycle.setSummary(R.string.minus_60);
+//            }
+            calculateDataTraffic(mWallpaperSize.getValue(), value);
             // 更新壁纸
             if (mAutoUpdate.isChecked()) {
                 updateWallpaper();
@@ -213,26 +216,33 @@ public class Settings extends PreferenceActivity
      * @param size  壁纸大小
      * @param cycle 更新周期
      */
-    private void calculateData(String size, String cycle) {
-        Log.d(TAG, "calculateData: size = " + size + ",cycle = " + cycle);
+    private void calculateDataTraffic(String size, String cycle) {
+        Log.d(TAG, "calculateDataTraffic: size = " + size + ",cycle = " + cycle);
         // 平均300KB/张
         final int size720P = 300;
         // 平均400KB/张
         final int size1080P = 400;
-        long length = 0;
+        long length = size720P;
         if (size.equals(mContext.getResources().getString(R.string.value_720p))) {
-            length += size720P;
+            length = size720P;
         } else if (size.equals(mContext.getResources().getString(R.string.value_1080p))) {
-            length += size1080P;
+            length = size1080P;
         }
-        if (cycle.equals(mContext.getResources().getString(R.string.value_10_minus))) {
-            length = 60 / 10 * length;
-        } else if (cycle.equals(mContext.getResources().getString(R.string.value_30_minus))) {
-            length = 60 / 30 * length;
-        }
+        int updateCycle = cycle == null ? getDefaultCycle() : Integer.valueOf(cycle);
+        length = 60 / updateCycle * length;
         if (mAutoUpdate.isChecked()) {
             mDataTraffic.setSummary(Tools.storageUnitConversion(length));
+//            mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), mUpdateCycle.getValue()));
         }
+    }
+
+    private int getDefaultCycle() {
+        if (mDataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
+            return Integer.valueOf(mContext.getResources().getString(R.string.config_jp_update_cycle));
+        } else if (mDataFrom.equals(mContext.getResources().getString(R.string.value_china))) {
+            return Integer.valueOf(mContext.getResources().getString(R.string.config_cn_update_cycle));
+        }
+        return Integer.valueOf(mContext.getResources().getString(R.string.config_jp_update_cycle));
     }
 
     @Override
@@ -272,11 +282,19 @@ public class Settings extends PreferenceActivity
         if (isAuto) {
             notification.showNotification(null);
             mAutoUpdate.setSummary(R.string.auto_help);
-            calculateData(mWallpaperSize.getValue(), mUpdateCycle.getValue());
+            calculateDataTraffic(mWallpaperSize.getValue(), mUpdateCycle.getValue());
+            updateCycle(mUpdateCycle.getValue());
+            mWifiOnly.setIcon(R.drawable.ic_wifi_only);
+            mUpdateCycle.setIcon(R.drawable.ic_update_cycle);
+            mDataTraffic.setIcon(R.drawable.ic_data_traffic);
         } else {
             notification.cancelNotification();
             mAutoUpdate.setSummary("");
             mDataTraffic.setSummary("");
+            mUpdateCycle.setSummary("");
+            mWifiOnly.setIcon(R.drawable.ic_wifi_only_gray);
+            mUpdateCycle.setIcon(R.drawable.ic_update_cycle_gray);
+            mDataTraffic.setIcon(R.drawable.ic_data_traffic_gray);
         }
         if (mDataFrom.getValue() == null || "".equals(mDataFrom.getValue())) {
             return;
@@ -288,6 +306,9 @@ public class Settings extends PreferenceActivity
             mUpdateCycle.setEntries(R.array.cn_update_cycle_entries);
             mUpdateCycle.setEntryValues(R.array.cn_update_cycle_values);
         }
+    }
+
+    private void calculateCycle(String value) {
     }
 
     private int getIndexFromValue(String key, String value) {
