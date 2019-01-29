@@ -83,9 +83,7 @@ public class BaseNotification {
         if (mManager == null) {
             mManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         }
-        if (mManager != null) {
-            mManager.cancel(Constants.NOTIFICATION_ID);
-        }
+        mManager.cancel(Constants.NOTIFICATION_ID);
     }
 
     public Notification getNotification() {

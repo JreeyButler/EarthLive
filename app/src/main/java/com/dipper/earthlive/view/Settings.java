@@ -139,6 +139,11 @@ public class Settings extends PreferenceActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
+        super.onDestroy();
+    }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object o) {

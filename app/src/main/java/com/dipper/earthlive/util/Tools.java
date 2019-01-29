@@ -17,6 +17,8 @@
 package com.dipper.earthlive.util;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.app.ApplicationErrorReport;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -38,7 +40,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadFactory;
@@ -226,6 +230,23 @@ public class Tools {
             DecimalFormat format = new DecimalFormat(".00");
             return format.format((float) length / Constants.KB) + "MB";
         }
+    }
+
+    public static boolean isServiceRunning(Context context, String serviceName) {
+        if (serviceName == null || "".equals(serviceName)) {
+            return false;
+        }
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager == null) {
+            return false;
+        }
+        List<ActivityManager.RunningServiceInfo> runningServiceInfos = manager.getRunningServices(30);
+        for (ActivityManager.RunningServiceInfo info : runningServiceInfos) {
+            if (info.service.getClassName().equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
