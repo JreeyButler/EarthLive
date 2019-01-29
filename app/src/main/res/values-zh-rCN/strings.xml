@@ -33,5 +33,8 @@
     <string name="auto_help">建议将应用加入白名单，保持后台自动更新壁纸。</string>
     <string name="set_wallpaper_success">壁纸设置成功</string>
     <string name="set_wallpaper_fail">壁纸设置失败</string>
+    <string name="no_permission_title">无权限，即将退出</string>
+    <string name="no_permission_message">应用程序必须使用存储权限，如果您拒绝授权，您将无法使用该应用程序</string>
+    <string name="no_permission_ok">知道了</string>
 
 </resources>

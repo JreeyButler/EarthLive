@@ -19,16 +19,15 @@ package com.dipper.earthlive.view;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.WallpaperManager;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,7 +43,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -58,7 +56,6 @@ import com.dipper.earthlive.util.Tools;
 
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * @author Dipper
@@ -271,9 +268,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         for (int result : grantResults) {
             if (result != PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "onRequestPermissionsResult: request permission failed , finish activity now.");
-                finish();
+                showNoPermissionDialog();
+
             }
         }
+    }
+
+    private void showNoPermissionDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+        dialog.setTitle(R.string.no_permission_title);
+        dialog.setMessage(R.string.no_permission_message);
+        dialog.setNegativeButton(R.string.no_permission_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        dialog.show();
     }
 
     private Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
