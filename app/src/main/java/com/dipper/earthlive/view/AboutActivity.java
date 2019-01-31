@@ -16,35 +16,73 @@
 
 package com.dipper.earthlive.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.dipper.earthlive.R;
 
 import java.util.Objects;
 
 /**
- * @author Yan.Liangliang
+ * @author Dipper
  * @date 2018/12/10
- * @email yanliang@jimi360.cn
+ * @email dipper.difference@gmail.com
  */
 public class AboutActivity extends Activity {
+    private final String TAG = "AboutActivity";
+    private Context mContext;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getActionBar()).setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_about);
+        mContext = this;
+        initView();
+    }
+
+    @SuppressLint("StringFormatInvalid")
+    private void initView() {
+        TextView mVersion = findViewById(R.id.app_version);
+        String version = String.format(mContext.getResources().getString(R.string.version), getVersionNumber());
+        Log.d(TAG, "initView: version = " + version);
+        mVersion.setText(version);
+    }
+
+
+    /**
+     * 获取软件版本号
+     *
+     * @return 软件版本号
+     */
+    private String getVersionNumber() {
+        PackageManager manager = mContext.getPackageManager();
+        try {
+            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+            return info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume: ");
         super.onResume();
     }
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
         super.onDestroy();
     }
 

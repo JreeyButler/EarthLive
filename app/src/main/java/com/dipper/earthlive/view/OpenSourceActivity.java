@@ -18,14 +18,16 @@ package com.dipper.earthlive.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.Build;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Html;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.dipper.earthlive.R;
+import com.dipper.earthlive.util.Constants;
 
 import java.util.Objects;
 
@@ -33,8 +35,12 @@ import java.util.Objects;
  * @author Dipper
  * @date 2018/12/27
  */
-public class OpenSourceActivity extends Activity {
-    private TextView mInformation;
+public class OpenSourceActivity extends Activity implements View.OnClickListener {
+    private final String TAG = "OpenSourceActivity";
+    private final int GITEE_INDEX = 0;
+    private final int GITHUB_INDEX = 1;
+    private TextView mGitee;
+    private TextView mGithub;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +51,13 @@ public class OpenSourceActivity extends Activity {
     }
 
     private void initView() {
-        mInformation = findViewById(R.id.information);
+        TextView mInformation = findViewById(R.id.information);
+        mGitee = findViewById(R.id.url_gitee);
+        mGithub = findViewById(R.id.url_github);
+        mGitee.setText(Constants.REPOSITORIES_URL[GITEE_INDEX]);
+        mGithub.setText(Constants.REPOSITORIES_URL[GITHUB_INDEX]);
+        mGitee.setOnClickListener(this);
+        mGithub.setOnClickListener(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -75,5 +87,25 @@ public class OpenSourceActivity extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri;
+        switch (view.getId()) {
+            case R.id.url_gitee:
+                uri = Uri.parse(mGitee.getText().toString());
+                intent.setData(uri);
+                startActivity(intent);
+                break;
+            case R.id.url_github:
+                uri = Uri.parse(mGithub.getText().toString());
+                intent.setData(uri);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 }

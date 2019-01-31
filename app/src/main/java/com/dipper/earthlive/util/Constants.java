@@ -84,7 +84,11 @@ public class Constants {
     public static final String JAPAN_NAME = "himawari8";
     public static final String CHINA_NAME = "fy4a";
     public static final String DEFAULT_NAME = "default";
-
+    public static final String[] REPOSITORIES_URL = {
+            // 开源中国
+            "https://gitee.com/JreeyBulter/EarthLive",
+            // Github
+            "https://github.com/JreeyButler/EarthLive"};
 
     public static class PictureUrl {
         public static final String JAPAN_HD_URL = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/2d/550/";
