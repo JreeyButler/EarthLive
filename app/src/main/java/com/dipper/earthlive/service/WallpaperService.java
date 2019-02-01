@@ -100,6 +100,7 @@ public class WallpaperService extends Service {
         intentFilter.addAction(Constants.ACTION_SET_WALLPAPER);
         intentFilter.addAction(Constants.ACTION_RENEW_WALLPAPER);
         intentFilter.addAction(Constants.ACTION_UPDATE_WALLPAPER);
+        intentFilter.addAction(Constants.ACTION_UPDATE_SIZE);
         registerReceiver(mReceiver, intentFilter);
     }
 
@@ -237,6 +238,14 @@ public class WallpaperService extends Service {
                     Toast.makeText(mContext, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
                 }
                 Toast.makeText(mContext, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
+            } else if (Constants.ACTION_UPDATE_SIZE.equals(action)) {
+                if (isAutoUpdate()){
+                    try {
+                        setHomeWallpaper();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     };

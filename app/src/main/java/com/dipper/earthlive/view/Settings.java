@@ -168,12 +168,9 @@ public class Settings extends PreferenceActivity
             } else if (value.equals(mContext.getResources().getString(R.string.value_usa))) {
                 mDataFrom.setSummary(R.string.usa);
             }
-            // 更新壁纸
-//            if (mAutoUpdate.isChecked()) {
-            updateWallpaper();
-//            }
             updateCycle(cycle);
             calculateDataTraffic(mWallpaperSize.getValue(), cycle);
+            updateWallpaper();
         } else if (Key.KEY_WALLPAPER_SIZE.equals(key)) {
             if (value.equals(mContext.getResources().getString(R.string.value_720p))) {
                 mWallpaperSize.setSummary(R.string.size_720p);
@@ -181,6 +178,7 @@ public class Settings extends PreferenceActivity
                 mWallpaperSize.setSummary(R.string.size_1080p);
             }
             calculateDataTraffic(value, mUpdateCycle.getValue());
+            updateWallpaperSize();
         } else if (Key.KEY_UPDATE_CYCLE.equals(key)) {
             mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), value));
 //            if (value.equals(mContext.getResources().getString(R.string.value_10_minus))) {
@@ -198,6 +196,10 @@ public class Settings extends PreferenceActivity
         }
         Tools.setStringSharePreference(mContext, key, value);
         return true;
+    }
+
+    private void updateWallpaperSize(){
+        mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_SIZE));
     }
 
     private void updateWallpaper() {
