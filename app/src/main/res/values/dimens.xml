@@ -7,4 +7,5 @@
     <dimen name="size_about_title">24sp</dimen>
     <dimen name="size_renew_size">48dp</dimen>
     <dimen name="size_about_icon">64dp</dimen>
+    <dimen name="size_open_source_logo">48dp</dimen>
 </resources>

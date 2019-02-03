@@ -46,8 +46,8 @@
             android:key="open_source"
             android:title="@string/open_source" />
         <PreferenceScreen
-            android:icon="@drawable/ic_check_update"
-            android:key="check_update"
-            android:title="@string/check_update" />
+            android:icon="@drawable/ic_help"
+            android:key="help"
+            android:title="@string/help" />
     </PreferenceCategory>
 </PreferenceScreen>

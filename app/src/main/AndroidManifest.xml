@@ -41,6 +41,11 @@
             android:label="@string/open_source"
             android:theme="@style/Base.V7.Widget.AppCompat.Toolbar" />
 
+        <activity
+            android:name=".view.HelpActivity"
+            android:label="@string/help"
+            android:theme="@style/Base.V7.Widget.AppCompat.Toolbar" />
+
         <service android:name=".service.WallpaperService" />
 
     </application>

@@ -90,6 +90,7 @@ public class Constants {
             "https://gitee.com/JreeyBulter/EarthLive",
             // Github
             "https://github.com/JreeyButler/EarthLive"};
+    public static final String FEEDBACK_EMAIL = "dipper.difference@gmail.com";
 
     public static class PictureUrl {
         public static final String JAPAN_HD_URL = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/2d/550/";
@@ -107,6 +108,7 @@ public class Constants {
         public static final String KEY_OPEN_SOURCE = "open_source";
         public static final String KEY_AUTO_UPDATE = "auto_update";
         public static final String KEY_WIFI_ONLY = "wifi_only";
+        public static final String KEY_HELP = "help";
     }
 }
 

@@ -36,7 +36,10 @@
     <string name="no_permission_title">无权限，即将退出</string>
     <string name="no_permission_message">应用程序必须使用存储权限，如果您拒绝授权，您将无法使用该应用程序</string>
     <string name="no_permission_ok">知道了</string>
-    <string name="version">版本 <xliff:g id="version">%s</xliff:g></string>
+    <string name="version">版本 V<xliff:g id="version">%s</xliff:g></string>
     <string name="wifi_only_notification">仅在Wi-Fi网络下更新壁纸</string>
-
+    <string name="feedback">反馈</string>
+    <string name="email_title">关于地球时刻的反馈</string>
+    <string name="help">常见问题</string>
+    <string name="checking">检查更新中...</string>
 </resources>

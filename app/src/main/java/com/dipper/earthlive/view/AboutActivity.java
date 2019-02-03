@@ -18,16 +18,23 @@ package com.dipper.earthlive.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.dipper.earthlive.R;
+import com.dipper.earthlive.util.Constants;
 
 import java.util.Objects;
 
@@ -36,7 +43,7 @@ import java.util.Objects;
  * @date 2018/12/10
  * @email dipper.difference@gmail.com
  */
-public class AboutActivity extends Activity {
+public class AboutActivity extends Activity implements View.OnClickListener, DialogInterface.OnCancelListener {
     private final String TAG = "AboutActivity";
     private Context mContext;
 
@@ -52,9 +59,13 @@ public class AboutActivity extends Activity {
     @SuppressLint("StringFormatInvalid")
     private void initView() {
         TextView mVersion = findViewById(R.id.app_version);
+        Button mFeedback = findViewById(R.id.feedback);
+        Button mCheckUpdate = findViewById(R.id.check_update);
         String version = String.format(mContext.getResources().getString(R.string.version), getVersionNumber());
         Log.d(TAG, "initView: version = " + version);
         mVersion.setText(version);
+        mFeedback.setOnClickListener(this);
+        mCheckUpdate.setOnClickListener(this);
     }
 
 
@@ -97,5 +108,40 @@ public class AboutActivity extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.feedback:
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:" + Constants.FEEDBACK_EMAIL));
+                intent.putExtra(Intent.EXTRA_SUBJECT, mContext.getResources().getString(R.string.email_title));
+                startActivity(intent);
+                break;
+            case R.id.check_update:
+                showUpdateDialog();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     *
+     */
+    private void showUpdateDialog() {
+        ProgressDialog dialog = ProgressDialog.show(
+                mContext,
+                mContext.getResources().getString(R.string.check_update),
+                mContext.getResources().getString(R.string.checking),
+                true,
+                true,
+                this);
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialogInterface) {
+
     }
 }

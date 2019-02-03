@@ -55,6 +55,7 @@ public class Settings extends PreferenceActivity
     private SwitchPreference mWifiOnly;
     private PreferenceScreen mDataTraffic;
     private PreferenceScreen mOpenSource;
+    private PreferenceScreen mHelp;
 
     private Context mContext;
 
@@ -109,6 +110,7 @@ public class Settings extends PreferenceActivity
         mUpdateCycle = (ListPreference) findPreference(Key.KEY_UPDATE_CYCLE);
         mDataTraffic = (PreferenceScreen) findPreference(Key.KEY_DATA_TRAFFIC);
         mOpenSource = (PreferenceScreen) findPreference(Key.KEY_OPEN_SOURCE);
+        mHelp = (PreferenceScreen) findPreference(Key.KEY_HELP);
 
         mDataFrom.setOnPreferenceChangeListener(this);
         mWallpaperSize.setOnPreferenceChangeListener(this);
@@ -120,6 +122,7 @@ public class Settings extends PreferenceActivity
         mWallpaperSize.setOnPreferenceClickListener(this);
         mUpdateCycle.setOnPreferenceClickListener(this);
         mOpenSource.setOnPreferenceClickListener(this);
+        mHelp.setOnPreferenceClickListener(this);
 
         mWifiOnly.setShouldDisableView(true);
         mUpdateCycle.setShouldDisableView(true);
@@ -271,12 +274,14 @@ public class Settings extends PreferenceActivity
                 startService(new Intent(mContext, WallpaperService.class));
             }
         } else if (Key.KEY_OPEN_SOURCE.equals(key)) {
-            mContext.startActivity(new Intent(this, OpenSourceActivity.class));
+            mContext.startActivity(new Intent(mContext, OpenSourceActivity.class));
         } else if (Key.KEY_WIFI_ONLY.equals(key)) {
             SwitchPreference switchPreference = (SwitchPreference) preference;
             boolean wifiOnly = switchPreference.isChecked();
             switchPreference.setChecked(wifiOnly);
             Tools.setBooleanSharePreference(mContext, key, wifiOnly);
+        } else if (Key.KEY_HELP.equals(key)) {
+            mContext.startActivity(new Intent(mContext, HelpActivity.class));
         }
         return false;
     }
