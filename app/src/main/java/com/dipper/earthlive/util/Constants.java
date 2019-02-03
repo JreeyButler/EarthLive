@@ -89,7 +89,7 @@ public class Constants {
             // 开源中国
             "https://gitee.com/JreeyBulter/EarthLive",
             // Github
-            "https://ic_github.com/JreeyButler/EarthLive"};
+            "https://github.com/JreeyButler/EarthLive"};
 
     public static class PictureUrl {
         public static final String JAPAN_HD_URL = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/2d/550/";
