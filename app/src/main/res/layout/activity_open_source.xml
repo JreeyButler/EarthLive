@@ -27,55 +27,77 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_large"
-                android:layout_marginEnd="@dimen/size_normal"
                 android:layout_marginTop="@dimen/size_normal"
+                android:layout_marginEnd="@dimen/size_normal"
                 android:layout_marginBottom="@dimen/size_normal"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/gitee"
+                <ImageView
+                    android:layout_width="@dimen/size_renew_size"
+                    android:layout_height="@dimen/size_renew_size"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_gitee" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/gitee"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:layout_margin="@dimen/size_normal"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/url_gitee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/darker_gray"
-                    android:textStyle="italic" />
+                    <TextView
+                        android:id="@+id/gitee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gitee"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/url_gitee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/darker_gray"
+                        android:textStyle="italic" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_large"
-                android:layout_marginEnd="@dimen/size_normal"
                 android:layout_marginTop="@dimen/size_normal"
+                android:layout_marginEnd="@dimen/size_normal"
                 android:layout_marginBottom="@dimen/size_normal"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/github"
+                <ImageView
+                    android:layout_width="@dimen/size_renew_size"
+                    android:layout_height="@dimen/size_renew_size"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_github" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/github"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:layout_margin="@dimen/size_normal"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/url_github"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/darker_gray"
-                    android:textStyle="italic" />
+                    <TextView
+                        android:id="@+id/github"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/github"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/url_github"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/darker_gray"
+                        android:textStyle="italic" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-
     </ScrollView>
-
-
 </LinearLayout>
