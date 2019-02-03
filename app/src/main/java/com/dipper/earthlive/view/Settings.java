@@ -198,7 +198,7 @@ public class Settings extends PreferenceActivity
         return true;
     }
 
-    private void updateWallpaperSize(){
+    private void updateWallpaperSize() {
         mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_SIZE));
     }
 
@@ -272,6 +272,11 @@ public class Settings extends PreferenceActivity
             }
         } else if (Key.KEY_OPEN_SOURCE.equals(key)) {
             mContext.startActivity(new Intent(this, OpenSourceActivity.class));
+        } else if (Key.KEY_WIFI_ONLY.equals(key)) {
+            SwitchPreference switchPreference = (SwitchPreference) preference;
+            boolean wifiOnly = switchPreference.isChecked();
+            switchPreference.setChecked(wifiOnly);
+            Tools.setBooleanSharePreference(mContext, key, wifiOnly);
         }
         return false;
     }

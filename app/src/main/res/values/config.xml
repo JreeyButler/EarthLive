@@ -2,6 +2,8 @@
 <resources>
     <!-- 默认：不启用自动更新 -->
     <bool name="config_auto_update">false</bool>
+    <!-- 默认：关闭仅在Wi-Fi网络下更新 -->
+    <bool name="config_wifi_only">false</bool>
     <!-- 默认：向日葵8号 -->
     <string name="config_data_from" translatable="false">@string/value_japan</string>
     <!-- 默认：720P -->

@@ -65,5 +65,6 @@ limitations under the License.\n
     <string name="version">Version <xliff:g id="version">%s</xliff:g></string>
     <string name="gitee" translatable="false">Gitee</string>
     <string name="github" translatable="false">Github</string>
+    <string name="wifi_only_notification">Update wallpaper only under Wi-Fi network</string>
 
 </resources>

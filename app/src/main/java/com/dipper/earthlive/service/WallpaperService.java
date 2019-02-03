@@ -44,8 +44,6 @@ import com.dipper.earthlive.util.DownloadTask;
 import com.dipper.earthlive.util.Tools;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -239,7 +237,7 @@ public class WallpaperService extends Service {
                 }
                 Toast.makeText(mContext, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
             } else if (Constants.ACTION_UPDATE_SIZE.equals(action)) {
-                if (isAutoUpdate()){
+                if (isAutoUpdate()) {
                     try {
                         setHomeWallpaper();
                     } catch (IOException e) {
@@ -265,6 +263,11 @@ public class WallpaperService extends Service {
         if (!Tools.isNetworkUseful(mContext)) {
             Log.e(TAG, "updateWallpaper: network error");
             showNotification(mContext.getResources().getString(R.string.network_error));
+            return;
+        }
+        // Wi-Fi only
+        if (Tools.isWifiOnly(mContext)  && !Tools.isWifiConnected(mContext)) {
+            showNotification(mContext.getResources().getString(R.string.wifi_only_notification));
             return;
         }
         // 下载图片

@@ -32,6 +32,7 @@ import android.util.Log;
 import android.util.Size;
 import android.widget.Toast;
 
+import com.dipper.earthlive.R;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.io.BufferedOutputStream;
@@ -141,6 +142,14 @@ public class Tools {
             }
         }
         return false;
+    }
+
+    /**
+     * @param context 上下文
+     * @return 是否仅使用Wi-Fi网络
+     */
+    public static boolean isWifiOnly(Context context) {
+        return getBooleanSharePreference(context, Constants.Key.KEY_WIFI_ONLY, context.getResources().getBoolean(R.bool.config_wifi_only));
     }
 
     /**
@@ -378,5 +387,24 @@ public class Tools {
     }
 
 
+    public static boolean isWifiConnected(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (manager == null) {
+            return false;
+        }
+        NetworkInfo info = manager.getActiveNetworkInfo();
+        if (info == null || !info.isAvailable()) {
+            return false;
+        }
+        NetworkInfo wifiInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (wifiInfo == null) {
+            return false;
+        }
+        NetworkInfo.State state = wifiInfo.getState();
+        if (state == null) {
+            return false;
+        }
+        return state == NetworkInfo.State.CONNECTING || state == NetworkInfo.State.CONNECTED;
+    }
 }
 

@@ -37,5 +37,6 @@
     <string name="no_permission_message">应用程序必须使用存储权限，如果您拒绝授权，您将无法使用该应用程序</string>
     <string name="no_permission_ok">知道了</string>
     <string name="version">版本 <xliff:g id="version">%s</xliff:g></string>
+    <string name="wifi_only_notification">仅在Wi-Fi网络下更新壁纸</string>
 
 </resources>
