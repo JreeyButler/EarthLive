@@ -17,12 +17,18 @@
 package com.dipper.earthlive.notification;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 
@@ -42,6 +48,9 @@ public class BaseNotification {
     private NotificationManager mManager;
     private Notification mNotification;
 
+    private static final String NOTIFICATION_CHANNEL_ID = "Test";
+    private static final String NOTIFICATION_CHANNEL_NAME = "Test";
+
     public BaseNotification(Context context) {
         this.mContext = context;
     }
@@ -51,29 +60,43 @@ public class BaseNotification {
         Log.d(TAG, "showNotification: ");
         String dataFrom = getDataFrom();
         String updateCycle = getUpdateCycle();
-        String msg = String.format(mContext.getResources().getString(R.string.notification_message), dataFrom, updateCycle);
-
-        Notification.Builder builder = new Notification.Builder(mContext)
-                .setSmallIcon(R.mipmap.ic_icon)
-                .setContentTitle(mContext.getResources().getString(R.string.notification_title))
-                .setContentText(message == null ? msg : message);
-
+        String msg = String.format(getStringFromRes(R.string.notification_message), dataFrom, updateCycle);
+        if (mManager == null) {
+            // 获取通知服务
+            mManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        }
         Intent intent = new Intent(mContext, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(intent);
-
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        // 设置跳转Intent到通知中
-        builder.setContentIntent(pendingIntent);
-        // 获取通知服务
-        NotificationManager manager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        // 构建通知
-        mNotification = builder.build();
-        mNotification.flags = Notification.FLAG_NO_CLEAR;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            Notification.Builder builder = new Notification.Builder(mContext)
+                    .setSmallIcon(R.drawable.icon_notification)
+                    .setContentTitle(getStringFromRes(R.string.notification_title))
+                    .setContentText(message == null ? msg : message);
+            // 设置跳转Intent到通知中
+            builder.setContentIntent(pendingIntent);
+            // 构建通知
+            mNotification = builder.build();
+            mNotification.flags = Notification.FLAG_NO_CLEAR;
+        } else {
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+            mManager.createNotificationChannel(channel);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, NOTIFICATION_CHANNEL_ID)
+                    .setSmallIcon(R.drawable.icon_notification)
+                    .setContentTitle(getStringFromRes(R.string.notification_title))
+                    .setContentText(message == null ? msg : message);
+            builder.setContentIntent(pendingIntent);
+            // 构建通知
+            mNotification = builder.build();
+            mNotification.flags = Notification.FLAG_NO_CLEAR;
+        }
+
         // 显示通知
-        if (manager != null) {
-            manager.notify(Constants.NOTIFICATION_ID, mNotification);
+        if (mManager != null) {
+            mManager.notify(Constants.NOTIFICATION_ID, mNotification);
         }
     }
 
@@ -98,15 +121,15 @@ public class BaseNotification {
     private String getDataFrom() {
         String value = Tools.getStringSharePreference(mContext,
                 Constants.Key.KEY_DATA_FROM,
-                mContext.getResources().getString(R.string.value_japan));
-        if (value.equals(mContext.getResources().getString(R.string.value_japan))) {
-            return mContext.getResources().getString(R.string.japan);
-        } else if (value.equals(mContext.getResources().getString(R.string.value_china))) {
-            return mContext.getResources().getString(R.string.china);
-        } else if (value.equals(mContext.getResources().getString(R.string.value_usa))) {
-            return mContext.getResources().getString(R.string.usa);
+                getStringFromRes(R.string.value_japan));
+        if (value.equals(getStringFromRes(R.string.value_japan))) {
+            return getStringFromRes(R.string.japan);
+        } else if (value.equals(getStringFromRes(R.string.value_china))) {
+            return Tools.getStringFromRes(mContext, R.string.china);
+        } else if (value.equals(getStringFromRes(R.string.value_usa))) {
+            return getStringFromRes(R.string.usa);
         }
-        return mContext.getResources().getString(R.string.japan);
+        return getStringFromRes(R.string.japan);
     }
 
     /**
@@ -117,14 +140,21 @@ public class BaseNotification {
     private String getUpdateCycle() {
         String value = Tools.getStringSharePreference(mContext,
                 Constants.Key.KEY_UPDATE_CYCLE,
-                mContext.getResources().getString(R.string.value_10_minus));
-        if (value.equals(mContext.getResources().getString(R.string.value_10_minus))) {
-            return mContext.getResources().getString(R.string.minus_10);
-        } else if (value.equals(mContext.getResources().getString(R.string.value_30_minus))) {
-            return mContext.getResources().getString(R.string.minus_30);
-        } else if (value.equals(mContext.getResources().getString(R.string.value_60_minus))) {
-            return mContext.getResources().getString(R.string.minus_60);
+                getStringFromRes(R.string.value_10_minus));
+        if (value.equals(getStringFromRes(R.string.value_10_minus))) {
+            return getStringFromRes(R.string.minus_10);
+        } else if (value.equals(getStringFromRes(R.string.value_30_minus))) {
+            return getStringFromRes(R.string.minus_30);
+        } else if (value.equals(getStringFromRes(R.string.value_60_minus))) {
+            return getStringFromRes(R.string.minus_60);
         }
-        return mContext.getResources().getString(R.string.minus_10);
+        return getStringFromRes(R.string.minus_10);
+    }
+
+    private String getStringFromRes(int resId) {
+        if (mContext == null) {
+            return "";
+        }
+        return mContext.getResources().getString(resId);
     }
 }

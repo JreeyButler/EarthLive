@@ -37,12 +37,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -66,9 +68,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private final String TAG = "MainActivity";
     private ImageView wallpaper, renew;
     private Context mContext;
-    private Toolbar mToolbar;
     private WallpaperService mWallpaperService;
     private boolean isServiceConnected;
+    private boolean exitReady;
 
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
@@ -103,8 +105,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void initService() {
         if (!Tools.isServiceRunning(mContext, WallpaperService.class.getName()) && isAutoUpdate()) {
+            Log.d(TAG, "initService: not running");
             startService(new Intent(mContext, WallpaperService.class));
         } else {
+            Log.d(TAG, "initService: running");
             bindService(new Intent(mContext, WallpaperService.class), connection, Context.BIND_AUTO_CREATE);
         }
     }
@@ -129,6 +133,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Log.d(TAG, "onDestroy: stop service");
             stopService(new Intent(this, WallpaperService.class));
         }
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     private void initApplicationDir() {
@@ -150,7 +155,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Button change = findViewById(R.id.change);
         Button display = findViewById(R.id.display);
         Button setWallpaper = findViewById(R.id.set_wallpaper);
-        mToolbar = findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         renew = findViewById(R.id.renew);
         wallpaper = findViewById(R.id.wallpaper);
         mToolbar.inflateMenu(R.menu.menu_main);
@@ -197,7 +202,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             return Constants.PICTURE_DIR_PATH + Constants.CHINA_NAME + Constants.NORMAL_PICTURE_STUFF;
         } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_usa))) {
             // 暂时先返回日本的节点
-            return Constants.PICTURE_DIR_PATH + Constants.JAPAN_NAME + Constants.DEFAULT_PICTURE_STUFF;
+            return Constants.PICTURE_DIR_PATH + Constants.USA_NAME + Constants.DEFAULT_PICTURE_STUFF;
         }
         return Constants.PictureUrl.JAPAN_NORMAL_URL + Tools.getLatestPictureTime();
     }
@@ -256,6 +261,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     break;
                 case Constants.MSG_CLEAR_RENEW_ANIMATION:
                     renew.clearAnimation();
+                    break;
+                case Constants.MSG_EXIT_READY:
+                    exitReady = false;
                     break;
                 default:
                     break;
@@ -328,5 +336,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
             isServiceConnected = false;
         }
     };
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!exitReady) {
+                Toast.makeText(mContext, mContext.getResources().getString(R.string.exit_ready), Toast.LENGTH_SHORT).show();
+                exitReady = true;
+                mHandler.sendEmptyMessageDelayed(Constants.MSG_EXIT_READY, 2000);
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }
 

@@ -17,20 +17,44 @@
 package com.dipper.earthlive.view;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.dipper.earthlive.R;
+import com.dipper.earthlive.util.HelpAdapter;
+import com.dipper.earthlive.util.Problem;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author Dipper
+ * @date 2018/11/20
+ * @email dipper.difference@gmail.com
+ */
 public class HelpActivity extends Activity {
+    public static final String TAG = "HelpActivity";
+    private Context mContext;
+    private List<Problem> mList;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getActionBar()).setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_help);
+        mContext = this;
+        initView();
+    }
+
+    private void initView() {
+        initData();
+        HelpAdapter mAdapter = new HelpAdapter(mContext, mList);
+        ListView mHelpList = findViewById(R.id.list_problems);
+        mHelpList.setAdapter(mAdapter);
     }
 
     @Override
@@ -44,5 +68,20 @@ public class HelpActivity extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 模拟数据
+     */
+    private void initData() {
+        if (mList == null) {
+            mList = new ArrayList<>();
+        }
+        for (int i = 0; i < 20; i++) {
+            Problem problem = new Problem();
+            problem.setTitle("壁纸一片漆黑？");
+            problem.setAnswer("刷新试试。");
+            mList.add(problem);
+        }
     }
 }

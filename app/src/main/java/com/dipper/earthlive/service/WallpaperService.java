@@ -403,7 +403,7 @@ public class WallpaperService extends Service {
             return Constants.PictureUrl.TEST_URL + Constants.CHINA_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
         } else if (dataFrom.equals(mContext.getResources().getString(R.string.value_usa))) {
             // 暂时先返回日本的节点
-            return Constants.PictureUrl.TEST_URL + Constants.JAPAN_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
+            return Constants.PictureUrl.TEST_URL + Constants.USA_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
         }
         return Constants.PictureUrl.TEST_URL + Constants.JAPAN_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
     }

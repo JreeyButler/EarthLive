@@ -31,6 +31,7 @@ public class Constants {
     public static final int MSG_TEST_DISPLAY = 0x10000;
     public static final int MSG_DISPLAY_WALLPAPER = 0x10001;
     public static final int MSG_CLEAR_RENEW_ANIMATION = 0x10002;
+    public static final int MSG_EXIT_READY = 0x10003;
 
     public static final int DEFAULT_SIZE = 1;
     public static final int SIZE_WALLPAPER = 1;
@@ -81,22 +82,29 @@ public class Constants {
     public static final String PICTURE_1_1 = "1_1" + DEFAULT_PICTURE_STUFF;
 
     public static final String WALLPAPER_PATH = WALLPAPER_DIR_PATH + WALLPAPER_NAME + DEFAULT_PICTURE_STUFF;
-    //    public static final String PICTURE_PATH = PICTURE_DIR_PATH + PICTURE_0_0;
     public static final String JAPAN_NAME = "himawari8";
     public static final String CHINA_NAME = "fy4a";
+    public static final String USA_NAME = "goes16";
     public static final String DEFAULT_NAME = "default";
     public static final String[] REPOSITORIES_URL = {
             // 开源中国
             "https://gitee.com/JreeyBulter/EarthLive",
             // Github
             "https://github.com/JreeyButler/EarthLive"};
+    public static final String[] DATA_FROM_URLS = {
+            // 风云4A
+            "http://www.nsmc.org.cn/NSMC/Home/Index.html",
+            // 向日葵8号
+            "http://himawari8.nict.go.jp/"
+    };
+
     public static final String FEEDBACK_EMAIL = "dipper.difference@gmail.com";
 
     public static class PictureUrl {
         public static final String JAPAN_HD_URL = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/2d/550/";
         public static final String JAPAN_NORMAL_URL = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/1d/550/";
         public static final String CHINA_URL = "https://www.suansuanru.club/img/";
-        public static final String TEST_URL = "http://192.168.31.245/img/";
+        public static final String TEST_URL = "http://192.168.3.113/img/";
         public static final String USA_URL = "";
     }
 

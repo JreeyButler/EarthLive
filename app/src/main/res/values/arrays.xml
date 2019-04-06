@@ -3,13 +3,13 @@
     <string-array name="data_from_values">
         <item>@string/value_japan</item>
         <item>@string/value_china</item>
-        <!--<item>@string/value_usa</item>-->
+        <item>@string/value_usa</item>
     </string-array>
 
     <string-array name="data_from_entries">
         <item>@string/japan</item>
         <item>@string/china</item>
-        <!--<item>@string/usa</item>-->
+        <item>@string/usa</item>
     </string-array>
 
     <string-array name="jp_update_cycle_values">

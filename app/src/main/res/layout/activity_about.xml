@@ -4,41 +4,135 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/app_icon"
-        android:layout_width="@dimen/size_about_icon"
-        android:layout_height="@dimen/size_about_icon"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="@dimen/size_about_icon"
-        android:src="@mipmap/ic_launcher" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/app_icon"
+                android:layout_width="@dimen/size_about_icon"
+                android:layout_height="@dimen/size_about_icon"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/size_about_icon"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/size_normal"
+                android:text="@string/app_name"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/size_about_title"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/app_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_normal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about_data_from"
+                    android:textColor="@android:color/black"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_large"
+                    android:layout_marginTop="@dimen/size_normal"
+                    android:layout_marginEnd="@dimen/size_normal"
+                    android:layout_marginBottom="@dimen/size_normal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/size_open_source_logo"
+                        android:layout_height="@dimen/size_open_source_logo"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logo_nsmc" />
+
+                    <LinearLayout
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/size_normal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nsmc"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/nsmc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/darker_gray"
+                            android:textStyle="italic" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_large"
+                    android:layout_marginTop="@dimen/size_normal"
+                    android:layout_marginEnd="@dimen/size_normal"
+                    android:layout_marginBottom="@dimen/size_normal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/size_open_source_logo"
+                        android:layout_height="@dimen/size_open_source_logo"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logo_nict" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/size_normal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nict"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/nict"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/darker_gray"
+                            android:textStyle="italic" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/app_icon"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="@dimen/size_normal"
-        android:text="@string/app_name"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/size_about_title"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/app_version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/app_name"
-        android:layout_centerHorizontal="true"
-        android:textColor="@android:color/black" />
-
-    <TextView
-        android:id="@+id/app_summary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@android:color/black" />
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/feedback"

@@ -258,6 +258,10 @@ public class Tools {
         return false;
     }
 
+    public static String getStringFromRes(Context context, int resId) {
+        return context.getResources().getString(resId);
+    }
+
     /**
      * 将合成的Bitmap保存到文件夹中
      *
@@ -345,8 +349,8 @@ public class Tools {
             Log.e(TAG, "getTime: time was null");
             return "";
         }
-        Integer hour = Integer.valueOf(time.substring(0, 2)) - 8;
-        Integer minus = Integer.valueOf(time.substring(3, time.length()));
+        int hour = Integer.valueOf(time.substring(0, 2)) - 8;
+        int minus = Integer.parseInt(time.substring(3, time.length()));
         if (hour < 0) {
             hour = 24 + hour;
         }
