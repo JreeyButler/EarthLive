@@ -33,6 +33,7 @@ import android.util.Log;
 
 
 import com.dipper.earthlive.util.Constants;
+import com.dipper.earthlive.util.SpUtil;
 import com.dipper.earthlive.util.Tools;
 import com.dipper.earthlive.view.MainActivity;
 import com.dipper.earthlive.R;
@@ -119,7 +120,7 @@ public class BaseNotification {
      * @return 壁纸数据来源
      */
     private String getDataFrom() {
-        String value = Tools.getStringSharePreference(mContext,
+        String value = SpUtil.getInstance().getStringSharePreference(
                 Constants.Key.KEY_DATA_FROM,
                 getStringFromRes(R.string.value_japan));
         if (value.equals(getStringFromRes(R.string.value_japan))) {
@@ -138,7 +139,7 @@ public class BaseNotification {
      * @return 更新周期
      */
     private String getUpdateCycle() {
-        String value = Tools.getStringSharePreference(mContext,
+        String value = SpUtil.getInstance().getStringSharePreference(
                 Constants.Key.KEY_UPDATE_CYCLE,
                 getStringFromRes(R.string.value_10_minus));
         if (value.equals(getStringFromRes(R.string.value_10_minus))) {

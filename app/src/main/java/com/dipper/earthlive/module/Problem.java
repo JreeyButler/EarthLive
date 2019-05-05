@@ -14,33 +14,37 @@
  * limitations under the License.
  */
 
-package com.dipper.earthlive;
-
-import android.app.Application;
-import android.content.Context;
-
-import com.squareup.leakcanary.LeakCanary;
+package com.dipper.earthlive.module;
 
 /**
  * @author Dipper
- * @date 2019/4/6
+ * @date 2018/12/27
  */
-public class EarthLiveApplication extends Application {
-    private Context mContext;
+public class Problem {
+    private String title;
+    private String answer;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mContext = this;
-        // 检查内存泄漏
-        if (LeakCanary.isInAnalyzerProcess(mContext)) {
-            return;
-        }
-        LeakCanary.install(this);
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
     @Override
-    public Context getApplicationContext() {
-        return mContext;
+    public String toString() {
+        return "Problem{" +
+                "title='" + title + '\'' +
+                ", answer='" + answer + '\'' +
+                '}';
     }
 }

@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 
 import com.dipper.earthlive.R;
+import com.dipper.earthlive.module.Problem;
 
 import java.util.List;
 

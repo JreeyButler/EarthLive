@@ -32,6 +32,7 @@ import com.dipper.earthlive.R;
 import com.dipper.earthlive.notification.BaseNotification;
 import com.dipper.earthlive.service.WallpaperService;
 import com.dipper.earthlive.util.Constants;
+import com.dipper.earthlive.util.SpUtil;
 import com.dipper.earthlive.util.Tools;
 
 import java.util.Objects;
@@ -197,7 +198,7 @@ public class Settings extends PreferenceActivity
                 updateWallpaper();
             }
         }
-        Tools.setStringSharePreference(mContext, key, value);
+        SpUtil.getInstance().setStringSharePreference(key, value);
         return true;
     }
 
@@ -212,7 +213,7 @@ public class Settings extends PreferenceActivity
     private void updateCycle(String value) {
         mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), value));
         mUpdateCycle.setValue(value);
-        Tools.setStringSharePreference(mContext, mUpdateCycle.getKey(), value);
+        SpUtil.getInstance().setStringSharePreference(mUpdateCycle.getKey(), value);
     }
 
     /**
@@ -269,7 +270,7 @@ public class Settings extends PreferenceActivity
             Log.d(TAG, "onPreferenceClick: isAuto = " + isAuto);
             switchPreference.setChecked(isAuto);
             filterAutoPreference(isAuto);
-            Tools.setBooleanSharePreference(mContext, key, isAuto);
+            SpUtil.getInstance().setBooleanSharePreference(key, isAuto);
             if (isAuto) {
                 startService(new Intent(mContext, WallpaperService.class));
             }
@@ -279,7 +280,7 @@ public class Settings extends PreferenceActivity
             SwitchPreference switchPreference = (SwitchPreference) preference;
             boolean wifiOnly = switchPreference.isChecked();
             switchPreference.setChecked(wifiOnly);
-            Tools.setBooleanSharePreference(mContext, key, wifiOnly);
+         SpUtil.getInstance().setBooleanSharePreference(key, wifiOnly);
         } else if (Key.KEY_HELP.equals(key)) {
             mContext.startActivity(new Intent(mContext, HelpActivity.class));
         }
