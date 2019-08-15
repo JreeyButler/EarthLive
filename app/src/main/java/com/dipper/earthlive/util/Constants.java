@@ -64,6 +64,7 @@ public class Constants {
     public static final String KEY_PICTURE_DOWNLOADED = "key_picture_downloaded";
     public static final String KEY_LATEST_UPDATE_TIME = "latest_update_time";
     public static final String TEST_PICTURE_NAME = "default";
+
 //    public static final String FY_4A_PICTURE_NAME = "FY-4A";
 
     private static final String APPLICATION_NAME = "EarthLive";
@@ -75,6 +76,7 @@ public class Constants {
 
     public static final String PICTURE_DIR_PATH = APPLICATION_PATH + PICTURE_DIR_NAME + File.separator;
     public static final String WALLPAPER_DIR_PATH = APPLICATION_PATH + WALLPAPER_DIR_NAME + File.separator;
+    public static final String RELEASE_APK_DOWNLOAD_PATH = APPLICATION_PATH;
 
     public static final String PICTURE_0_0 = "0_0" + DEFAULT_PICTURE_STUFF;
     public static final String PICTURE_0_1 = "0_1" + DEFAULT_PICTURE_STUFF;
@@ -104,8 +106,10 @@ public class Constants {
         public static final String JAPAN_HD_URL = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/2d/550/";
         public static final String JAPAN_NORMAL_URL = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/1d/550/";
         public static final String CHINA_URL = "https://www.suansuanru.club/img/";
-        public static final String TEST_URL = "http://192.168.3.113/img/";
+        public static final String TEST_URL = "https://earthlive.dippernet.xyz/img/";
+        public static final String TEST_UPDATE_JSON_URL = "https://earthlive.dippernet.xyz/application/";
         public static final String USA_URL = "";
+        public static final String UPDATE_PACKAGE_URL = "http://192.168.3.115/download/Earthlive.apk";
     }
 
     public static class Key {

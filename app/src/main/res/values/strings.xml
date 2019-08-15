@@ -16,7 +16,7 @@
     <string name="other">Other</string>
     <string name="japan">Himawari 8(Japan)</string>
     <string name="china">FY-4A(China)</string>
-    <string name="usa">GOES-17(USA)</string>
+    <string name="usa">GOES-16(USA)</string>
     <string name="minus_10">10 minus</string>
     <string name="minus_30">30 minus</string>
     <string name="minus_60">1 hour</string>
@@ -72,7 +72,14 @@ limitations under the License.\n
     <string name="checking">Checking…</string>
     <string name="about_data_from">Data From</string>
     <string name="nict">NICT ScienceCloud</string>
-    <string name="nsmc" >NSMC</string>
+    <string name="nsmc">NSMC</string>
     <string name="exit_ready">Click again to exit the app</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="no_email_client_title">Feedback</string>
+    <string name="no_email_client_message">Please send feedback message to:dipper.difference@gmail.com</string>
+    <string name="feedback_github">Feedback via github issue</string>
+    <string name="new_application_released">New version</string>
+    <string name="released_message">Find new application,version name:<xliff:g id="version name">%s</xliff:g></string>
+    <string name="next_time">Next time</string>
+    <string name="downlaod_now">Download now</string>
 </resources>

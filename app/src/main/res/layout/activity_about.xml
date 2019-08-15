@@ -140,8 +140,10 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/check_update"
         android:layout_margin="@dimen/size_small"
+        android:background="@drawable/bg_button"
         android:text="@string/feedback"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/check_update"
@@ -149,6 +151,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/size_small"
+        android:background="@drawable/bg_button"
         android:text="@string/check_update"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
 </RelativeLayout>

@@ -25,6 +25,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 
 import com.dipper.earthlive.R;
 import com.dipper.earthlive.service.WallpaperService;
@@ -57,6 +58,7 @@ public class WelcomeActivity extends Activity {
     protected void onResume() {
         Log.d(TAG, "onResume: ");
         super.onResume();
+        hideNavigationBar();
         if (!Tools.isServiceRunning(mContext, WallpaperService.class.getName())) {
             mHandler.sendEmptyMessageDelayed(EXIT, 2000);
         }
@@ -90,5 +92,20 @@ public class WelcomeActivity extends Activity {
         Log.d(TAG, "onDestroy: ");
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
+        showNavigationBar();
+    }
+
+    private void hideNavigationBar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
+    private void showNavigationBar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 }

@@ -35,10 +35,13 @@ public class DownloadTask implements Runnable {
     private final String TAG = "DownloadTask";
     private String url;
     private DownloadCallback mCallback;
+    private String path;
 
-    public DownloadTask(String url, DownloadCallback callback) {
+    public DownloadTask(String url, String path, DownloadCallback callback) {
         this.url = url;
+        this.path = path;
         this.mCallback = callback;
+
     }
 
     @Override
@@ -51,14 +54,20 @@ public class DownloadTask implements Runnable {
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            if (request != null) {
-                inputStream = response.body().byteStream();
-                RandomAccessFile randomAccessFile = new RandomAccessFile(Constants.PICTURE_DIR_PATH + fileName, "rw");
-                byte[] bytes = new byte[1024];
-                int length;
-                while ((length = inputStream.read(bytes)) != -1) {
-                    randomAccessFile.write(bytes, 0, length);
-                }
+            if (response.body() == null) {
+                Log.e(TAG, "run: response.body() is null ");
+                return;
+            }
+            inputStream = response.body().byteStream();
+            if (path == null || "".equals(path)) {
+                mCallback.downloadFailed(fileName);
+                return;
+            }
+            RandomAccessFile randomAccessFile = new RandomAccessFile(path + fileName, "rw");
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = inputStream.read(bytes)) != -1) {
+                randomAccessFile.write(bytes, 0, length);
             }
         } catch (Exception e) {
             mCallback.downloadFailed(fileName);
@@ -76,13 +85,20 @@ public class DownloadTask implements Runnable {
         }
     }
 
+    /**
+     * 获取下载文件的名称
+     *
+     * @return 下载文件的名称
+     */
     private String getFileName() {
         final String flag = "/";
         if (url == null || "".equals(url)) {
             return "";
         }
         int index = url.lastIndexOf(flag);
-        return url.substring(index + 1, url.length());
+        String fileName = url.substring(index + 1);
+        Log.d(TAG, "getFileName: file name = " + fileName);
+        return fileName;
     }
 
 }

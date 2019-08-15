@@ -92,7 +92,8 @@ public class WallpaperService extends Service {
     private void initReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_TIME_TICK);
-        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        // 取消对用户解锁屏幕的监听，减少用户系统压力
+//        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
 
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         intentFilter.addAction(Constants.ACTION_SET_WALLPAPER);
@@ -203,47 +204,53 @@ public class WallpaperService extends Service {
             String action = intent.getAction();
             action = action == null ? "" : action;
             Log.d(TAG, "onReceive: action = " + action);
-            if (Intent.ACTION_TIME_TICK.equals(action)) {
-                if (isAutoUpdate() && checkUpdateTime() && checkUpdate()) {
+            switch (action) {
+                case Intent.ACTION_TIME_TICK:
+                    if (isAutoUpdate() && checkUpdateTime() && checkUpdate()) {
+                        latestTime = Tools.getLatestPictureTime();
+                        updateWallpaper();
+                    }
+                    break;
+                case Intent.ACTION_SCREEN_ON:
+                    if (isAutoUpdate() && checkUpdateTime() && checkUpdate()) {
+                        latestTime = Tools.getLatestPictureTime();
+                        updateWallpaper();
+                    }
+                    break;
+                case ConnectivityManager.CONNECTIVITY_ACTION:
+                    if (isAutoUpdate() && checkUpdateTime() && checkUpdate()) {
+                        latestTime = Tools.getLatestPictureTime();
+                        updateWallpaper();
+                    }
+                    break;
+                case Constants.ACTION_RENEW_WALLPAPER:
+                    // 当用户点击刷新按钮，无论是否存在最新的壁纸都再次下载新的壁纸
+                    updateWallpaper();
+                    break;
+                case Constants.ACTION_UPDATE_WALLPAPER:
                     latestTime = Tools.getLatestPictureTime();
                     updateWallpaper();
-                }
-            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                if (isAutoUpdate() && checkUpdateTime() && checkUpdate()) {
-                    latestTime = Tools.getLatestPictureTime();
-                    updateWallpaper();
-                }
-            } else if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
-                if (isAutoUpdate() && checkUpdateTime() && checkUpdate()) {
-                    latestTime = Tools.getLatestPictureTime();
-                    updateWallpaper();
-                }
-            } else if (Constants.ACTION_RENEW_WALLPAPER.equals(action)) {
-                if (checkUpdate()) {
-                    latestTime = Tools.getLatestPictureTime();
-                    updateWallpaper();
-                    return;
-                }
-                noUpdate();
-            } else if (Constants.ACTION_UPDATE_WALLPAPER.equals(action)) {
-                latestTime = Tools.getLatestPictureTime();
-                updateWallpaper();
-            } else if (Constants.ACTION_SET_WALLPAPER.equals(action)) {
-                try {
-                    setHomeWallpaper();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(mContext, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
-                }
-                Toast.makeText(mContext, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
-            } else if (Constants.ACTION_UPDATE_SIZE.equals(action)) {
-                if (isAutoUpdate()) {
+                    break;
+                case Constants.ACTION_SET_WALLPAPER:
                     try {
                         setHomeWallpaper();
                     } catch (IOException e) {
                         e.printStackTrace();
+                        Toast.makeText(mContext, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
                     }
-                }
+                    Toast.makeText(mContext, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
+                    break;
+                case Constants.ACTION_UPDATE_SIZE:
+                    if (isAutoUpdate()) {
+                        try {
+                            setHomeWallpaper();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     };
@@ -266,7 +273,7 @@ public class WallpaperService extends Service {
             return;
         }
         // Wi-Fi only
-        if (Tools.isWifiOnly(mContext)  && !Tools.isWifiConnected(mContext)) {
+        if (Tools.isWifiOnly(mContext) && !Tools.isWifiConnected(mContext)) {
             showNotification(mContext.getResources().getString(R.string.wifi_only_notification));
             return;
         }
@@ -277,9 +284,9 @@ public class WallpaperService extends Service {
     private void startDownload(String url) {
         Log.d(TAG, "startDownload: url = " + url);
         if (downloadService == null) {
-            downloadService = Tools.getThreadPool(4, 8);
+            downloadService = Tools.getThreadPool(2, 8);
         }
-        downloadService.submit(new DownloadTask(url, mCallBack));
+        downloadService.submit(new DownloadTask(url,Constants.PICTURE_DIR_PATH , mCallBack));
         isDownloading = true;
     }
 

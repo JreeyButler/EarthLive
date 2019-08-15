@@ -15,7 +15,7 @@
     <string name="other">其他</string>
     <string name="china">风云4号-A（中国）</string>
     <string name="japan">向日葵8号（日本）</string>
-    <string name="usa">GOES-17（美国）</string>
+    <string name="usa">GOES-16（美国）</string>
     <string name="minus_10">10分钟</string>
     <string name="minus_30">30分钟</string>
     <string name="minus_60">1小时</string>
@@ -47,4 +47,11 @@
     <string name="nsmc">中国国家卫星气象中心</string>
     <string name="exit_ready">再次点击，退出程序</string>
     <string name="unknown_error">未知错误</string>
+    <string name="no_email_client_title">反馈</string>
+    <string name="no_email_client_message">请发送邮件到：dipper.difference@gmail.com</string>
+    <string name="feedback_github">通过Github反馈</string>
+    <string name="new_application_released">发现新版本，版本号：<xliff:g id="version_name">%s</xliff:g></string>
+    <string name="released_message">新版本</string>
+    <string name="downlaod_now">立即下载</string>
+    <string name="next_time">下次再说</string>
 </resources>
