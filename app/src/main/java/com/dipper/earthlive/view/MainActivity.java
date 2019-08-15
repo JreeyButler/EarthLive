@@ -54,6 +54,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.dipper.earthlive.R;
 import com.dipper.earthlive.service.WallpaperService;
 import com.dipper.earthlive.util.Constants;
+import com.dipper.earthlive.util.SpUtil;
 import com.dipper.earthlive.util.Tools;
 
 
@@ -194,7 +195,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * @return 图片位置
      */
     private String getPicturePath() {
-        String dataFrom = Tools.getStringSharePreference(mContext, Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
+        String dataFrom = SpUtil.getInstance().getStringSharePreference(Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
 
         if (dataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
             return Constants.PICTURE_DIR_PATH + Constants.JAPAN_NAME + Constants.DEFAULT_PICTURE_STUFF;
@@ -316,7 +317,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     };
 
     private boolean isAutoUpdate() {
-        return Tools.getBooleanSharePreference(mContext,
+        return SpUtil.getInstance().getBooleanSharePreference(
                 Constants.Key.KEY_AUTO_UPDATE,
                 mContext.getResources().getBoolean(R.bool.config_auto_update));
     }

@@ -149,33 +149,9 @@ public class Tools {
      * @return 是否仅使用Wi-Fi网络
      */
     public static boolean isWifiOnly(Context context) {
-        return getBooleanSharePreference(context, Constants.Key.KEY_WIFI_ONLY, context.getResources().getBoolean(R.bool.config_wifi_only));
+        return SpUtil.getInstance().getBooleanSharePreference(Constants.Key.KEY_WIFI_ONLY, context.getResources().getBoolean(R.bool.config_wifi_only));
     }
 
-    /**
-     * @param mContext activity context
-     * @param key      key
-     * @param value    value
-     */
-    public static void setIntValue(Context mContext, String key, int value) {
-        SharedPreferences sharedPreferences =
-                mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
-        editor.apply();
-        editor.clear();
-    }
-
-    /**
-     * @param mContext 上下文
-     * @param key      键
-     * @return 值
-     */
-    public static int getIntValue(Context mContext, String key) {
-        SharedPreferences sharedPreferences =
-                mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(key, -1);
-    }
 
     @SuppressLint("CommitPrefEdits")
     public static void setStringSharePreference(Context context, String key, String value) {

@@ -25,7 +25,7 @@ import android.widget.ListView;
 
 import com.dipper.earthlive.R;
 import com.dipper.earthlive.util.HelpAdapter;
-import com.dipper.earthlive.util.Problem;
+import com.dipper.earthlive.module.Problem;
 
 import java.util.ArrayList;
 import java.util.List;

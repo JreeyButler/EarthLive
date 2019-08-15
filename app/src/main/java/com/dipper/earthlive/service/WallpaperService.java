@@ -41,6 +41,7 @@ import com.dipper.earthlive.notification.BaseNotification;
 import com.dipper.earthlive.util.Constants;
 import com.dipper.earthlive.util.DownloadCallback;
 import com.dipper.earthlive.util.DownloadTask;
+import com.dipper.earthlive.util.SpUtil;
 import com.dipper.earthlive.util.Tools;
 
 import java.io.IOException;
@@ -158,7 +159,7 @@ public class WallpaperService extends Service {
     private boolean checkUpdateTime() {
         nowTime = System.currentTimeMillis();
         long realLatestTime = getRealUpdateTime();
-        String temp = Tools.getStringSharePreference(mContext, Constants.Key.KEY_UPDATE_CYCLE, mContext.getResources().getString(R.string.config_jp_update_cycle));
+        String temp = SpUtil.getInstance().getStringSharePreference(Constants.Key.KEY_UPDATE_CYCLE, mContext.getResources().getString(R.string.config_jp_update_cycle));
         long cycle = Long.valueOf(temp) * 60 * 1000;
         Log.d(TAG, "checkUpdateTime: cycle = " + cycle + ", now = " + (nowTime - realLatestTime));
         return ((nowTime - realLatestTime) >= cycle);
@@ -173,7 +174,7 @@ public class WallpaperService extends Service {
             Log.e(TAG, "getLatestTime: context is null");
             return defaultValue;
         }
-        return Tools.getStringSharePreference(mContext, Constants.KEY_LATEST_PICTURE_TIME, defaultValue);
+        return SpUtil.getInstance().getStringSharePreference(Constants.KEY_LATEST_PICTURE_TIME, defaultValue);
     }
 
     /**
@@ -183,7 +184,7 @@ public class WallpaperService extends Service {
      */
     private long getRealUpdateTime() {
         final long defaultValue = 0L;
-        return Tools.getLongSharePreference(mContext, Constants.KEY_LATEST_UPDATE_TIME, defaultValue);
+        return SpUtil.getInstance().getLongSharePreference(Constants.KEY_LATEST_UPDATE_TIME, defaultValue);
     }
 
     /**
@@ -195,7 +196,7 @@ public class WallpaperService extends Service {
             return;
         }
         Log.d(TAG, "saveLastUpdateTime: nowTime =" + nowTime);
-        Tools.setLongSharePreference(mContext, Constants.KEY_LATEST_UPDATE_TIME, nowTime);
+        SpUtil.getInstance().setLongSharePreference(Constants.KEY_LATEST_UPDATE_TIME, nowTime);
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -356,7 +357,7 @@ public class WallpaperService extends Service {
 
     private void setLatestTime(String time) {
         time = time == null ? "" : time;
-        Tools.setStringSharePreference(mContext, Constants.KEY_LATEST_PICTURE_TIME, time);
+        SpUtil.getInstance().setStringSharePreference(Constants.KEY_LATEST_PICTURE_TIME, time);
     }
 
     @SuppressLint("StringFormatMatches")
@@ -373,9 +374,10 @@ public class WallpaperService extends Service {
      * @return true:开启；false:未开启
      */
     private boolean isAutoUpdate() {
-        return Tools.getBooleanSharePreference(mContext,
+        return SpUtil.getInstance().getBooleanSharePreference(
                 Constants.Key.KEY_AUTO_UPDATE,
                 mContext.getResources().getBoolean(R.bool.config_auto_update));
+
     }
 
     /**
@@ -385,7 +387,7 @@ public class WallpaperService extends Service {
      */
     private Size getWallpaperSize() {
         Size size = new Size(Constants.SIZE_720P_WIDTH, Constants.SIZE_720P_HEIGHT);
-        String value = Tools.getStringSharePreference(mContext,
+        String value = SpUtil.getInstance().getStringSharePreference(
                 Constants.Key.KEY_WALLPAPER_SIZE,
                 mContext.getResources().getString(R.string.config_wallpaper_size));
         if (value.equals(mContext.getResources().getString(R.string.value_720p))) {
@@ -402,7 +404,7 @@ public class WallpaperService extends Service {
      * @return 图片地址
      */
     private String getPictureUrls() {
-        String dataFrom = Tools.getStringSharePreference(mContext, Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
+        String dataFrom = SpUtil.getInstance().getStringSharePreference(Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
 
         if (dataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
             return Constants.PictureUrl.TEST_URL + Constants.JAPAN_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;
