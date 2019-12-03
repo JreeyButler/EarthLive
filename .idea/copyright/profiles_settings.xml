@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="Dipper-Apache2" />
+  <settings default="Dipper-Apache2">
+    <module2copyright>
+      <element module="All" copyright="Dipper-Apache2" />
+    </module2copyright>
+  </settings>
 </component>
