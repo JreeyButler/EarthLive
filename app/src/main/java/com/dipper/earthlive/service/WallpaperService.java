@@ -28,13 +28,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.Size;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.dipper.earthlive.R;
 import com.dipper.earthlive.notification.BaseNotification;
@@ -46,6 +46,8 @@ import com.dipper.earthlive.util.Tools;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+
+import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 
 /**
  * @author Dipper
@@ -96,7 +98,7 @@ public class WallpaperService extends Service {
         // 取消对用户解锁屏幕的监听，减少用户系统压力
 //        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
 
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        intentFilter.addAction(CONNECTIVITY_ACTION);
         intentFilter.addAction(Constants.ACTION_SET_WALLPAPER);
         intentFilter.addAction(Constants.ACTION_RENEW_WALLPAPER);
         intentFilter.addAction(Constants.ACTION_UPDATE_WALLPAPER);
@@ -159,8 +161,8 @@ public class WallpaperService extends Service {
     private boolean checkUpdateTime() {
         nowTime = System.currentTimeMillis();
         long realLatestTime = getRealUpdateTime();
-        String temp = SpUtil.getInstance().getStringSharePreference(Constants.Key.KEY_UPDATE_CYCLE, mContext.getResources().getString(R.string.config_jp_update_cycle));
-        long cycle = Long.valueOf(temp) * 60 * 1000;
+        String temp = new SpUtil(this, true).getString(Constants.Key.KEY_UPDATE_CYCLE, mContext.getResources().getString(R.string.config_jp_update_cycle));
+        long cycle = Long.parseLong(temp) * 60 * 1000;
         Log.d(TAG, "checkUpdateTime: cycle = " + cycle + ", now = " + (nowTime - realLatestTime));
         return ((nowTime - realLatestTime) >= cycle);
     }
@@ -174,7 +176,7 @@ public class WallpaperService extends Service {
             Log.e(TAG, "getLatestTime: context is null");
             return defaultValue;
         }
-        return SpUtil.getInstance().getStringSharePreference(Constants.KEY_LATEST_PICTURE_TIME, defaultValue);
+        return new SpUtil(this, true).getString(Constants.KEY_LATEST_PICTURE_TIME, defaultValue);
     }
 
     /**
@@ -184,7 +186,7 @@ public class WallpaperService extends Service {
      */
     private long getRealUpdateTime() {
         final long defaultValue = 0L;
-        return SpUtil.getInstance().getLongSharePreference(Constants.KEY_LATEST_UPDATE_TIME, defaultValue);
+        return new SpUtil(this, true).getLong(Constants.KEY_LATEST_UPDATE_TIME, defaultValue);
     }
 
     /**
@@ -196,7 +198,7 @@ public class WallpaperService extends Service {
             return;
         }
         Log.d(TAG, "saveLastUpdateTime: nowTime =" + nowTime);
-        SpUtil.getInstance().setLongSharePreference(Constants.KEY_LATEST_UPDATE_TIME, nowTime);
+        new SpUtil(this, true).setLong(Constants.KEY_LATEST_UPDATE_TIME, nowTime);
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -207,18 +209,8 @@ public class WallpaperService extends Service {
             Log.d(TAG, "onReceive: action = " + action);
             switch (action) {
                 case Intent.ACTION_TIME_TICK:
-                    if (isAutoUpdate() && checkUpdateTime() && checkUpdate()) {
-                        latestTime = Tools.getLatestPictureTime();
-                        updateWallpaper();
-                    }
-                    break;
                 case Intent.ACTION_SCREEN_ON:
-                    if (isAutoUpdate() && checkUpdateTime() && checkUpdate()) {
-                        latestTime = Tools.getLatestPictureTime();
-                        updateWallpaper();
-                    }
-                    break;
-                case ConnectivityManager.CONNECTIVITY_ACTION:
+                case CONNECTIVITY_ACTION:
                     if (isAutoUpdate() && checkUpdateTime() && checkUpdate()) {
                         latestTime = Tools.getLatestPictureTime();
                         updateWallpaper();
@@ -287,7 +279,7 @@ public class WallpaperService extends Service {
         if (downloadService == null) {
             downloadService = Tools.getThreadPool(2, 8);
         }
-        downloadService.submit(new DownloadTask(url,Constants.PICTURE_DIR_PATH , mCallBack));
+        downloadService.submit(new DownloadTask(url, Constants.PICTURE_DIR_PATH, mCallBack));
         isDownloading = true;
     }
 
@@ -357,7 +349,7 @@ public class WallpaperService extends Service {
 
     private void setLatestTime(String time) {
         time = time == null ? "" : time;
-        SpUtil.getInstance().setStringSharePreference(Constants.KEY_LATEST_PICTURE_TIME, time);
+        new SpUtil(this, true).getString(Constants.KEY_LATEST_PICTURE_TIME, time);
     }
 
     @SuppressLint("StringFormatMatches")
@@ -374,7 +366,7 @@ public class WallpaperService extends Service {
      * @return true:开启；false:未开启
      */
     private boolean isAutoUpdate() {
-        return SpUtil.getInstance().getBooleanSharePreference(
+        return new SpUtil(this, true).getBoolean(
                 Constants.Key.KEY_AUTO_UPDATE,
                 mContext.getResources().getBoolean(R.bool.config_auto_update));
 
@@ -387,7 +379,7 @@ public class WallpaperService extends Service {
      */
     private Size getWallpaperSize() {
         Size size = new Size(Constants.SIZE_720P_WIDTH, Constants.SIZE_720P_HEIGHT);
-        String value = SpUtil.getInstance().getStringSharePreference(
+        String value = new SpUtil(this, true).getString(
                 Constants.Key.KEY_WALLPAPER_SIZE,
                 mContext.getResources().getString(R.string.config_wallpaper_size));
         if (value.equals(mContext.getResources().getString(R.string.value_720p))) {
@@ -404,7 +396,7 @@ public class WallpaperService extends Service {
      * @return 图片地址
      */
     private String getPictureUrls() {
-        String dataFrom = SpUtil.getInstance().getStringSharePreference(Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
+        String dataFrom = new SpUtil(this, true).getString(Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
 
         if (dataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
             return Constants.PictureUrl.TEST_URL + Constants.JAPAN_NAME + "/" + Constants.DEFAULT_NAME + Constants.NORMAL_PICTURE_STUFF;

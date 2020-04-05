@@ -1,51 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-
     <PreferenceCategory android:title="@string/setting_wallpaper">
         <ListPreference
+            android:defaultValue="@string/config_data_from"
             android:entries="@array/data_from_entries"
             android:entryValues="@array/data_from_values"
             android:icon="@drawable/ic_data_from"
             android:key="data_from"
             android:title="@string/data_from" />
-
         <ListPreference
+            android:defaultValue="@string/config_wallpaper_size"
             android:entries="@array/wallpaper_size_entries"
             android:entryValues="@array/wallpaper_size_values"
             android:icon="@drawable/ic_wallpaper_size"
             android:key="wallpaper_size"
             android:title="@string/wallpaper_size" />
-
-        <SwitchPreference
-            android:icon="@drawable/ic_auto_update"
-            android:key="auto_update"
-            android:title="@string/automatic_update" />
-
-        <SwitchPreference
-            android:icon="@drawable/ic_wifi_only"
-            android:key="wifi_only"
-            android:title="@string/network_summary" />
-
         <ListPreference
+            android:defaultValue="@string/config_cn_update_cycle"
             android:entries="@array/jp_update_cycle_entries"
             android:entryValues="@array/jp_update_cycle_values"
             android:icon="@drawable/ic_update_cycle"
             android:key="update_cycle"
             android:title="@string/update_cycle" />
-
-        <PreferenceScreen
+        <SwitchPreference
+            android:defaultValue="@bool/config_auto_update"
+            android:icon="@drawable/ic_auto_update"
+            android:key="auto_update"
+            android:title="@string/automatic_update" />
+        <SwitchPreference
+            android:defaultValue="@bool/config_wifi_only"
+            android:icon="@drawable/ic_wifi_only"
+            android:key="wifi_only"
+            android:title="@string/network_summary" />
+        <Preference
             android:icon="@drawable/ic_data_traffic"
             android:key="expected_data_traffic"
             android:title="@string/expected_data_traffic" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/other">
-        <PreferenceScreen
+        <Preference
             android:icon="@drawable/ic_open_source"
             android:key="open_source"
             android:title="@string/open_source" />
-        <PreferenceScreen
+        <Preference
             android:icon="@drawable/ic_help"
             android:key="help"
             android:title="@string/help" />

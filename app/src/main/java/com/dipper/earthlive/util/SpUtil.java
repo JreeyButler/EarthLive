@@ -19,34 +19,43 @@ package com.dipper.earthlive.util;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
-import com.dipper.earthlive.application.EarthLiveApplication;
+import androidx.preference.PreferenceManager;
 
+/**
+ * @author Dipper
+ */
 public class SpUtil {
     private static final String TAG = "SpUtil";
-    private static SpUtil mUtil;
-    private Context mContext;
 
-    private SpUtil() {
-        mContext = EarthLiveApplication.getContext();
+    private boolean isConfiguration;
+    private SharedPreferences sharedPreferences;
+
+    public SpUtil(Context context) {
+        new SpUtil(context, false);
     }
 
-    public static SpUtil getInstance() {
-        if (mUtil == null) {
-            mUtil = new SpUtil();
+    public SpUtil(Context context, boolean isConfiguration) {
+        this.isConfiguration = isConfiguration;
+        if (isConfiguration) {
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        } else {
+            sharedPreferences = context.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
         }
-        return mUtil;
     }
 
     /**
      * @param key   key
      * @param value value
      */
-    public void setIntValue(String key, int value) {
-        SharedPreferences sharedPreferences =
-                mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    public void setInt(String key, int value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
+        if (isConfiguration) {
+            editor.putString(key, String.valueOf(value));
+        } else {
+            editor.putInt(key, value);
+        }
         editor.apply();
         editor.clear();
     }
@@ -55,76 +64,77 @@ public class SpUtil {
      * @param key 键
      * @return 值
      */
-    public int getIntValue(String key) {
-        SharedPreferences sharedPreferences =
-                mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    public int getInt(String key) {
+        if (isConfiguration) {
+            String value = sharedPreferences.getString(key, "-1");
+            return Integer.parseInt(value);
+        }
         return sharedPreferences.getInt(key, -1);
     }
 
 
     @SuppressLint("CommitPrefEdits")
-    public void setStringSharePreference(String key, String value) {
-        SharedPreferences preferences = mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+    public void setString(String key, String value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.apply();
+        editor.clear();
     }
 
     /**
-     *
-     * @param key
-     * @param defaultValue
-     * @return
+     * @param key          键
+     * @param defaultValue 默认值
+     * @return 值
      */
-    public String getStringSharePreference(String key, String defaultValue) {
-        SharedPreferences preferences = mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        return preferences.getString(key, defaultValue);
+    public String getString(String key, String defaultValue) {
+        return sharedPreferences.getString(key, defaultValue);
     }
 
     /**
-     *
-     * @param key
-     * @param value
+     * @param key   键
+     * @param value 值
      */
-    public void setBooleanSharePreference(String key, boolean value) {
-        SharedPreferences preferences = mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+    public void setBoolean(String key, boolean value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(key, value);
         editor.apply();
+        editor.clear();
     }
 
     /**
-     *
-     * @param key
-     * @param defaultValue
-     * @return
+     * @param key          键
+     * @param defaultValue 默认值
+     * @return 值
      */
-    public boolean getBooleanSharePreference(String key, boolean defaultValue) {
-        SharedPreferences preferences = mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        return preferences.getBoolean(key, defaultValue);
+    public boolean getBoolean(String key, boolean defaultValue) {
+        return sharedPreferences.getBoolean(key, defaultValue);
     }
 
     /**
-     *
-     * @param key
-     * @param value
+     * @param key   键
+     * @param value 值
      */
-    public void setLongSharePreference(String key, long value) {
-        SharedPreferences preferences = mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putLong(key, value);
+    public void setLong(String key, long value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (isConfiguration) {
+            editor.putString(key, String.valueOf(value));
+        } else {
+            editor.putLong(key, value);
+        }
         editor.apply();
+        editor.clear();
     }
 
     /**
-     *
-     * @param key
-     * @param defaultValue
-     * @return
+     * @param key          键
+     * @param defaultValue 默认值
+     * @return 值
      */
-    public long getLongSharePreference(String key, long defaultValue) {
-        SharedPreferences preferences = mContext.getSharedPreferences(Constants.SHARE_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        return preferences.getLong(key, defaultValue);
+    public long getLong(String key, long defaultValue) {
+        if (isConfiguration) {
+            String value = sharedPreferences.getString(key, String.valueOf(defaultValue));
+            return Long.parseLong(value);
+        }
+        return sharedPreferences.getLong(key, defaultValue);
     }
-
 }

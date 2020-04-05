@@ -149,7 +149,7 @@ public class Tools {
      * @return 是否仅使用Wi-Fi网络
      */
     public static boolean isWifiOnly(Context context) {
-        return SpUtil.getInstance().getBooleanSharePreference(Constants.Key.KEY_WIFI_ONLY, context.getResources().getBoolean(R.bool.config_wifi_only));
+        return new SpUtil(context, true).getBoolean(Constants.Key.KEY_WIFI_ONLY, context.getResources().getBoolean(R.bool.config_wifi_only));
     }
 
 

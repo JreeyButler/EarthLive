@@ -16,20 +16,23 @@
 
 package com.dipper.earthlive.view;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.dipper.earthlive.R;
 import com.dipper.earthlive.service.WallpaperService;
 import com.dipper.earthlive.util.Tools;
+
+import java.lang.ref.WeakReference;
 
 /**
  * @author Dipper
@@ -37,16 +40,17 @@ import com.dipper.earthlive.util.Tools;
  */
 public class WelcomeActivity extends Activity {
     private final String TAG = "WelcomeActivity";
-    private final int EXIT = 1;
+    private static final int EXIT = 1;
     private Context mContext;
+    private Handler mHandler;
 
     @Override
-
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         mContext = this;
+        mHandler = new Handler(new HandlerCallback(this));
         if (Tools.isServiceRunning(mContext, WallpaperService.class.getName())) {
             mHandler.sendEmptyMessage(EXIT);
         } else {
@@ -60,25 +64,26 @@ public class WelcomeActivity extends Activity {
         super.onResume();
         hideNavigationBar();
         if (!Tools.isServiceRunning(mContext, WallpaperService.class.getName())) {
-            mHandler.sendEmptyMessageDelayed(EXIT, 2000);
+            mHandler.sendEmptyMessageDelayed(EXIT, 5000);
         }
     }
 
-    @SuppressLint("HandlerLeak")
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case EXIT:
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    mContext.startActivity(intent);
-                    break;
-                default:
-                    break;
-            }
+    private static class HandlerCallback implements Handler.Callback {
+        private WeakReference<Context> mContextRef;
+
+        HandlerCallback(Context context) {
+            mContextRef = new WeakReference<>(context);
         }
-    };
+
+        @Override
+        public boolean handleMessage(@NonNull Message message) {
+            if (message.what == EXIT) {
+                Intent intent = new Intent(mContextRef.get(), MainActivity.class);
+                mContextRef.get().startActivity(intent);
+            }
+            return false;
+        }
+    }
 
     @Override
     protected void onPause() {

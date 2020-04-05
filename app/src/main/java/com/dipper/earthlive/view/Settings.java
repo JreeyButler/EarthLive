@@ -16,26 +16,23 @@
 
 package com.dipper.earthlive.view;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.dipper.earthlive.R;
-import com.dipper.earthlive.notification.BaseNotification;
-import com.dipper.earthlive.service.WallpaperService;
 import com.dipper.earthlive.util.Constants;
-import com.dipper.earthlive.util.SpUtil;
-import com.dipper.earthlive.util.Tools;
-
-import java.util.Objects;
 
 import static com.dipper.earthlive.util.Constants.Key;
 
@@ -45,327 +42,168 @@ import static com.dipper.earthlive.util.Constants.Key;
  * @date 2018/12/1
  * @email dipper.difference@gmail.com
  */
-public class Settings extends PreferenceActivity
-        implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
-    private final String TAG = "Settings";
-
-    private ListPreference mDataFrom;
-    private ListPreference mWallpaperSize;
-    private ListPreference mUpdateCycle;
-    private SwitchPreference mAutoUpdate;
-    private SwitchPreference mWifiOnly;
-    private PreferenceScreen mDataTraffic;
-    private PreferenceScreen mOpenSource;
-    private PreferenceScreen mHelp;
-
-    private Context mContext;
+public class Settings extends AppCompatActivity {
+    private static final String TAG = "Settings";
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings);
-        Objects.requireNonNull(getActionBar()).setDisplayHomeAsUpEnabled(true);
-        mContext = this;
-        initView();
+        addBackButton();
+        setContentView(new LinearLayout(this));
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .commit();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initDefaultValue();
-    }
-
-    private void initDefaultValue() {
-        if (mDataFrom.getValue() == null || "".equals(mDataFrom.getValue())) {
-            int index = getIndexFromValue(mDataFrom.getKey(),
-                    mContext.getResources().getString(R.string.config_data_from));
-            mDataFrom.setValueIndex(index);
-            mDataFrom.setSummary(getSummaryFromIndex(mDataFrom.getKey(), index));
-        } else {
-            mDataFrom.setSummary(getSummaryFromValue(mDataFrom.getKey(), mDataFrom.getValue()));
+    private void addBackButton() {
+        ActionBar actionBar = getActionBar();
+        if (actionBar == null) {
+            Log.e(TAG, "addBackButton: action bar is null");
+            return;
         }
-        if (mWallpaperSize.getValue() == null || "".equals(mWallpaperSize.getValue())) {
-            int index = getIndexFromValue(mWallpaperSize.getKey(),
-                    mContext.getResources().getString(R.string.config_wallpaper_size));
-            mWallpaperSize.setValueIndex(index);
-            mWallpaperSize.setSummary(getSummaryFromIndex(mWallpaperSize.getKey(), index));
-        } else {
-            mWallpaperSize.setSummary(getSummaryFromValue(mWallpaperSize.getKey(), mWallpaperSize.getValue()));
-        }
-        if (mUpdateCycle.getValue() == null || "".equals(mUpdateCycle.getValue())) {
-            String value = mContext.getResources().getString(R.string.config_jp_update_cycle);
-            Log.d(TAG, "initDefaultValue: value = " + value);
-            mUpdateCycle.setValue(value);
-        }
-        if (mAutoUpdate.isChecked()) {
-            mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), mUpdateCycle.getValue()));
-        }
-
-    }
-
-    private void initView() {
-        mDataFrom = (ListPreference) findPreference(Key.KEY_DATA_FROM);
-        mWallpaperSize = (ListPreference) findPreference(Key.KEY_WALLPAPER_SIZE);
-        mAutoUpdate = (SwitchPreference) findPreference(Key.KEY_AUTO_UPDATE);
-        mWifiOnly = (SwitchPreference) findPreference(Key.KEY_WIFI_ONLY);
-        mUpdateCycle = (ListPreference) findPreference(Key.KEY_UPDATE_CYCLE);
-        mDataTraffic = (PreferenceScreen) findPreference(Key.KEY_DATA_TRAFFIC);
-        mOpenSource = (PreferenceScreen) findPreference(Key.KEY_OPEN_SOURCE);
-        mHelp = (PreferenceScreen) findPreference(Key.KEY_HELP);
-
-        mDataFrom.setOnPreferenceChangeListener(this);
-        mWallpaperSize.setOnPreferenceChangeListener(this);
-        mUpdateCycle.setOnPreferenceChangeListener(this);
-
-        mAutoUpdate.setOnPreferenceClickListener(this);
-        mWifiOnly.setOnPreferenceClickListener(this);
-        mDataFrom.setOnPreferenceClickListener(this);
-        mWallpaperSize.setOnPreferenceClickListener(this);
-        mUpdateCycle.setOnPreferenceClickListener(this);
-        mOpenSource.setOnPreferenceClickListener(this);
-        mHelp.setOnPreferenceClickListener(this);
-
-        mWifiOnly.setShouldDisableView(true);
-        mUpdateCycle.setShouldDisableView(true);
-        mDataTraffic.setShouldDisableView(true);
-
-        filterAutoPreference(mAutoUpdate.isChecked());
+        actionBar.setDisplayShowHomeEnabled(true);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            default:
-                break;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    protected void onDestroy() {
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
         Log.d(TAG, "onDestroy: ");
         super.onDestroy();
     }
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object o) {
-        String key = preference.getKey();
-        key = key == null ? "" : key;
-        String value = String.valueOf(o);
+    public static class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener, Preference.SummaryProvider {
+        private static final String TAG = "SettingsFragment";
 
-        if (Key.KEY_DATA_FROM.equals(key)) {
-            String cycle = mContext.getResources().getString(R.string.config_jp_update_cycle);
-            if (value.equals(mContext.getResources().getString(R.string.value_japan))) {
-                mDataFrom.setSummary(R.string.japan);
-                mUpdateCycle.setEntries(R.array.jp_update_cycle_entries);
-                mUpdateCycle.setEntryValues(R.array.jp_update_cycle_values);
-                cycle = mContext.getResources().getString(R.string.config_jp_update_cycle);
-            } else if (value.equals(mContext.getResources().getString(R.string.value_china))) {
-                mDataFrom.setSummary(R.string.china);
-                mUpdateCycle.setEntries(R.array.cn_update_cycle_entries);
-                mUpdateCycle.setEntryValues(R.array.cn_update_cycle_values);
-                cycle = mContext.getResources().getString(R.string.config_cn_update_cycle);
-                Log.d(TAG, "onPreferenceChange: 123");
-            } else if (value.equals(mContext.getResources().getString(R.string.value_usa))) {
-                mDataFrom.setSummary(R.string.usa);
+        private Context mContext;
+
+        @Override
+        public void onAttach(@NonNull Context context) {
+            super.onAttach(context);
+            this.mContext = context;
+        }
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.settings, rootKey);
+            initView();
+        }
+
+        private String[] keys = new String[]{
+                Key.KEY_DATA_FROM,
+                Key.KEY_WALLPAPER_SIZE,
+                Key.KEY_AUTO_UPDATE,
+                Key.KEY_WIFI_ONLY,
+                Key.KEY_UPDATE_CYCLE,
+                Key.KEY_DATA_TRAFFIC,
+                Key.KEY_OPEN_SOURCE,
+                Key.KEY_HELP,
+        };
+
+        private void initView() {
+            for (String key : keys) {
+                Preference preference = findPreference(key);
+                if (preference == null) {
+                    continue;
+                }
+                preference.setOnPreferenceChangeListener(this);
+                preference.setOnPreferenceClickListener(this);
+                preference.setSummaryProvider(this);
+
             }
-            updateCycle(cycle);
-            calculateDataTraffic(mWallpaperSize.getValue(), cycle);
-            updateWallpaper();
-        } else if (Key.KEY_WALLPAPER_SIZE.equals(key)) {
-            if (value.equals(mContext.getResources().getString(R.string.value_720p))) {
-                mWallpaperSize.setSummary(R.string.size_720p);
-            } else if (value.equals(mContext.getResources().getString(R.string.value_1080p))) {
-                mWallpaperSize.setSummary(R.string.size_1080p);
+            filterPreference(isAutoDownloadWallpaper());
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            String key = preference.getKey();
+            if (Key.KEY_AUTO_UPDATE.equals(key)) {
+                filterPreference((boolean) newValue);
             }
-            calculateDataTraffic(value, mUpdateCycle.getValue());
-            updateWallpaperSize();
-        } else if (Key.KEY_UPDATE_CYCLE.equals(key)) {
-            mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), value));
-//            if (value.equals(mContext.getResources().getString(R.string.value_10_minus))) {
-//                mUpdateCycle.setSummary(R.string.minus_10);
-//            } else if (value.equals(mContext.getResources().getString(R.string.value_30_minus))) {
-//                mUpdateCycle.setSummary(R.string.minus_30);
-//            } else if (value.equals(mContext.getResources().getString(R.string.value_60_minus))) {
-//                mUpdateCycle.setSummary(R.string.minus_60);
-//            }
-            calculateDataTraffic(mWallpaperSize.getValue(), value);
-            // 更新壁纸
-            if (mAutoUpdate.isChecked()) {
-                updateWallpaper();
-            }
+            return true;
         }
-        SpUtil.getInstance().setStringSharePreference(key, value);
-        return true;
-    }
 
-    private void updateWallpaperSize() {
-        mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_SIZE));
-    }
-
-    private void updateWallpaper() {
-        mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_WALLPAPER));
-    }
-
-    private void updateCycle(String value) {
-        mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), value));
-        mUpdateCycle.setValue(value);
-        SpUtil.getInstance().setStringSharePreference(mUpdateCycle.getKey(), value);
-    }
-
-    /**
-     * 计算开启自动更新每小时消耗的流量
-     *
-     * @param size  壁纸大小
-     * @param cycle 更新周期
-     */
-    private void calculateDataTraffic(String size, String cycle) {
-        Log.d(TAG, "calculateDataTraffic: size = " + size + ",cycle = " + cycle);
-        // 平均300KB/张
-        final int size720P = 300;
-        // 平均400KB/张
-        final int size1080P = 400;
-        long length = size720P;
-        if (size.equals(mContext.getResources().getString(R.string.value_720p))) {
-            length = size720P;
-        } else if (size.equals(mContext.getResources().getString(R.string.value_1080p))) {
-            length = size1080P;
-        }
-        int updateCycle = cycle == null ? getDefaultCycle() : Integer.valueOf(cycle);
-        length = 60 / updateCycle * length;
-        if (mAutoUpdate.isChecked()) {
-            mDataTraffic.setSummary(Tools.storageUnitConversion(length));
-//            mUpdateCycle.setSummary(getSummaryFromValue(mUpdateCycle.getKey(), mUpdateCycle.getValue()));
-        }
-    }
-
-    private int getDefaultCycle() {
-        if (mDataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
-            return Integer.valueOf(mContext.getResources().getString(R.string.config_jp_update_cycle));
-        } else if (mDataFrom.equals(mContext.getResources().getString(R.string.value_china))) {
-            return Integer.valueOf(mContext.getResources().getString(R.string.config_cn_update_cycle));
-        }
-        return Integer.valueOf(mContext.getResources().getString(R.string.config_jp_update_cycle));
-    }
-
-    @Override
-    public boolean onPreferenceClick(Preference preference) {
-        String key = preference.getKey();
-        key = key == null ? "" : key;
-        if (Key.KEY_DATA_FROM.equals(key)) {
-            String value = ((ListPreference) preference).getValue();
-            Log.d(TAG, "onPreferenceClick: value = " + value);
-        } else if (Key.KEY_WALLPAPER_SIZE.equals(key)) {
-            String value = ((ListPreference) preference).getValue();
-            Log.d(TAG, "onPreferenceClick: value = " + value);
-        } else if (Key.KEY_UPDATE_CYCLE.equals(key)) {
-            String value = ((ListPreference) preference).getValue();
-            Log.d(TAG, "onPreferenceClick: value = " + value);
-        } else if (Key.KEY_AUTO_UPDATE.equals(key)) {
-            SwitchPreference switchPreference = ((SwitchPreference) preference);
-            boolean isAuto = switchPreference.isChecked();
-            Log.d(TAG, "onPreferenceClick: isAuto = " + isAuto);
-            switchPreference.setChecked(isAuto);
-            filterAutoPreference(isAuto);
-            SpUtil.getInstance().setBooleanSharePreference(key, isAuto);
-            if (isAuto) {
-                startService(new Intent(mContext, WallpaperService.class));
-            }
-        } else if (Key.KEY_OPEN_SOURCE.equals(key)) {
-            mContext.startActivity(new Intent(mContext, OpenSourceActivity.class));
-        } else if (Key.KEY_WIFI_ONLY.equals(key)) {
-            SwitchPreference switchPreference = (SwitchPreference) preference;
-            boolean wifiOnly = switchPreference.isChecked();
-            switchPreference.setChecked(wifiOnly);
-         SpUtil.getInstance().setBooleanSharePreference(key, wifiOnly);
-        } else if (Key.KEY_HELP.equals(key)) {
-            mContext.startActivity(new Intent(mContext, HelpActivity.class));
-        }
-        return false;
-    }
-
-    private void filterAutoPreference(boolean isAuto) {
-        mWifiOnly.setEnabled(isAuto);
-        mUpdateCycle.setEnabled(isAuto);
-        mDataTraffic.setEnabled(isAuto);
-        BaseNotification notification = new BaseNotification(mContext);
-        if (isAuto) {
-            notification.showNotification(null);
-            mAutoUpdate.setSummary(R.string.auto_help);
-            calculateDataTraffic(mWallpaperSize.getValue(), mUpdateCycle.getValue());
-            updateCycle(mUpdateCycle.getValue());
-            mWifiOnly.setIcon(R.drawable.ic_wifi_only);
-            mUpdateCycle.setIcon(R.drawable.ic_update_cycle);
-            mDataTraffic.setIcon(R.drawable.ic_data_traffic);
-        } else {
-            notification.cancelNotification();
-            mAutoUpdate.setSummary("");
-            mDataTraffic.setSummary("");
-            mUpdateCycle.setSummary("");
-            mWifiOnly.setIcon(R.drawable.ic_wifi_only_gray);
-            mUpdateCycle.setIcon(R.drawable.ic_update_cycle_gray);
-            mDataTraffic.setIcon(R.drawable.ic_data_traffic_gray);
-        }
-        if (mDataFrom.getValue() == null || "".equals(mDataFrom.getValue())) {
-            return;
-        }
-        if (mDataFrom.getValue().equals(mContext.getResources().getString(R.string.value_japan))) {
-            mUpdateCycle.setEntryValues(R.array.jp_update_cycle_values);
-            mUpdateCycle.setEntries(R.array.jp_update_cycle_entries);
-        } else if (mDataFrom.getValue().equals(mContext.getResources().getString(R.string.value_china))) {
-            mUpdateCycle.setEntries(R.array.cn_update_cycle_entries);
-            mUpdateCycle.setEntryValues(R.array.cn_update_cycle_values);
-        }
-    }
-
-    private void calculateCycle(String value) {
-    }
-
-    private int getIndexFromValue(String key, String value) {
-        CharSequence[] values = null;
-        if (Key.KEY_DATA_FROM.equals(key)) {
-            values = mDataFrom.getEntryValues();
-        } else if (Key.KEY_WALLPAPER_SIZE.equals(key)) {
-            values = mWallpaperSize.getEntryValues();
-        } else if (Key.KEY_UPDATE_CYCLE.equals(key)) {
-            values = mUpdateCycle.getEntryValues();
-        }
-        if (values == null || "".equals(value)) {
-            return 0;
-        }
-        for (int i = 0; i < values.length; i++) {
-            if (values[i].equals(value)) {
-                return i;
+        private void filterPreference(boolean isAuto) {
+            Log.d(TAG, "filterPreference: isAuto = " + isAuto);
+            for (String key : keys) {
+                switch (key) {
+                    case Key.KEY_WIFI_ONLY:
+                    case Key.KEY_DATA_TRAFFIC:
+                        Preference preference = findPreference(key);
+                        if (preference == null) {
+                            break;
+                        }
+                        preference.setEnabled(isAuto);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
-        return 0;
-    }
 
-    private CharSequence getSummaryFromIndex(String key, int index) {
-        CharSequence summary = mContext.getResources().getString(R.string.unknown);
-        if (Key.KEY_DATA_FROM.equals(key)) {
-            summary = mDataFrom.getEntries()[index];
-        } else if (Key.KEY_WALLPAPER_SIZE.equals(key)) {
-            summary = mWallpaperSize.getEntries()[index];
-        } else if (Key.KEY_UPDATE_CYCLE.equals(key)) {
-            summary = mUpdateCycle.getEntries()[index];
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            String key = preference.getKey();
+            key = key == null ? "" : key;
+            switch (key) {
+                case Key.KEY_OPEN_SOURCE:
+                    mContext.startActivity(new Intent(mContext, OpenSourceActivity.class));
+                    break;
+                case Key.KEY_HELP:
+                    mContext.startActivity(new Intent(mContext, HelpActivity.class));
+                    break;
+                default:
+                    break;
+            }
+            return true;
         }
-        return summary;
-    }
 
-    private CharSequence getSummaryFromValue(String key, String value) {
-        CharSequence summary = mContext.getResources().getString(R.string.unknown);
-        int index = getIndexFromValue(key, value);
-        if (Key.KEY_DATA_FROM.equals(key)) {
-            summary = mDataFrom.getEntries()[index];
-        } else if (Key.KEY_WALLPAPER_SIZE.equals(key)) {
-            summary = mWallpaperSize.getEntries()[index];
-        } else if (Key.KEY_UPDATE_CYCLE.equals(key)) {
-            summary = mUpdateCycle.getEntries()[index];
+        @Override
+        public CharSequence provideSummary(Preference preference) {
+            CharSequence summary = "";
+            String key = preference.getKey();
+            if (key == null || "".equals(key)) {
+                return summary;
+            }
+            switch (key) {
+                case Key.KEY_DATA_FROM:
+                case Key.KEY_WALLPAPER_SIZE:
+                case Key.KEY_UPDATE_CYCLE:
+                    ListPreference listPreference = ((ListPreference) preference);
+                    int index = listPreference.findIndexOfValue(listPreference.getValue());
+                    if (index == -1) {
+                        break;
+                    }
+                    summary = listPreference.getEntries()[index];
+                    break;
+                default:
+                    break;
+            }
+            return summary;
         }
-        return summary;
+
+        private void updateWallpaperSize() {
+            mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_SIZE));
+        }
+
+        private void updateWallpaper() {
+            mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_WALLPAPER));
+        }
+
+        private boolean isAutoDownloadWallpaper() {
+            return false;
+        }
     }
 }

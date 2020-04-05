@@ -19,13 +19,14 @@ package com.dipper.earthlive.view;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import androidx.annotation.Nullable;
+
 import com.dipper.earthlive.R;
 import com.dipper.earthlive.util.HelpAdapter;
-import com.dipper.earthlive.module.Problem;
+import com.dipper.earthlive.bean.Problem;
 
 import java.util.ArrayList;
 import java.util.List;

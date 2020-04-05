@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dipper.earthlive.model;
+package com.dipper.earthlive.bean;
 
 import java.util.List;
 

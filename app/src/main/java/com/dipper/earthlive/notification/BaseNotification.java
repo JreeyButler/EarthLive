@@ -17,7 +17,6 @@
 package com.dipper.earthlive.notification;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -26,11 +25,10 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+
+import androidx.core.app.NotificationCompat;
 
 import com.dipper.earthlive.util.Constants;
 import com.dipper.earthlive.util.SpUtil;
@@ -120,7 +118,7 @@ public class BaseNotification {
      * @return 壁纸数据来源
      */
     private String getDataFrom() {
-        String value = SpUtil.getInstance().getStringSharePreference(
+        String value = new SpUtil(mContext, true).getString(
                 Constants.Key.KEY_DATA_FROM,
                 getStringFromRes(R.string.value_japan));
         if (value.equals(getStringFromRes(R.string.value_japan))) {
@@ -139,7 +137,7 @@ public class BaseNotification {
      * @return 更新周期
      */
     private String getUpdateCycle() {
-        String value = SpUtil.getInstance().getStringSharePreference(
+        String value = new SpUtil(mContext, false).getString(
                 Constants.Key.KEY_UPDATE_CYCLE,
                 getStringFromRes(R.string.value_10_minus));
         if (value.equals(getStringFromRes(R.string.value_10_minus))) {

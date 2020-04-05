@@ -1,5 +1,5 @@
 /*
- * Copyright (c) [2019] [Dipper]
+ * Copyright (c) [2020] [Dipper]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dipper.earthlive.module;
+package com.dipper.earthlive.bean;
 
 /**
  * @author Dipper

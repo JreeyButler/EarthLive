@@ -18,7 +18,6 @@ package com.dipper.earthlive.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -33,11 +32,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -46,6 +43,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -65,7 +65,7 @@ import java.io.File;
  * @date 2018/11/20
  * @email dipper.difference@gmail.com
  */
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private final String TAG = "MainActivity";
     private ImageView wallpaper, renew;
     private Context mContext;
@@ -102,6 +102,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         renewWallpaper();
         initReceiver();
         initService();
+        hideNavigationBar();
     }
 
     private void initService() {
@@ -156,15 +157,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Button change = findViewById(R.id.change);
         Button display = findViewById(R.id.display);
         Button setWallpaper = findViewById(R.id.set_wallpaper);
-        Toolbar mToolbar = findViewById(R.id.toolbar);
         renew = findViewById(R.id.renew);
         wallpaper = findViewById(R.id.wallpaper);
-        mToolbar.inflateMenu(R.menu.menu_main);
         change.setOnClickListener(this);
         display.setOnClickListener(this);
         setWallpaper.setOnClickListener(this);
         renew.setOnClickListener(this);
-        mToolbar.setOnMenuItemClickListener(menuItemClickListener);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -195,7 +199,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * @return 图片位置
      */
     private String getPicturePath() {
-        String dataFrom = SpUtil.getInstance().getStringSharePreference(Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
+        String dataFrom = new SpUtil(mContext, true).getString(Constants.Key.KEY_DATA_FROM, mContext.getResources().getString(R.string.config_data_from));
 
         if (dataFrom.equals(mContext.getResources().getString(R.string.value_japan))) {
             return Constants.PICTURE_DIR_PATH + Constants.JAPAN_NAME + Constants.DEFAULT_PICTURE_STUFF;
@@ -298,26 +302,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
         dialog.show();
     }
 
-    private Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            int itemId = menuItem.getItemId();
-            switch (itemId) {
-                case R.id.settings:
-                    mContext.startActivity(new Intent(mContext, Settings.class));
-                    break;
-                case R.id.about:
-                    mContext.startActivity(new Intent(mContext, AboutActivity.class));
-                    break;
-                default:
-                    break;
-            }
-            return false;
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.settings:
+                mContext.startActivity(new Intent(mContext, Settings.class));
+                break;
+            case R.id.about:
+                mContext.startActivity(new Intent(mContext, AboutActivity.class));
+                break;
+            default:
+                break;
         }
-    };
+        return super.onOptionsItemSelected(item);
+    }
 
     private boolean isAutoUpdate() {
-        return SpUtil.getInstance().getBooleanSharePreference(
+        return new SpUtil(this, true).getBoolean(
                 Constants.Key.KEY_AUTO_UPDATE,
                 mContext.getResources().getBoolean(R.bool.config_auto_update));
     }
@@ -349,6 +351,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void hideNavigationBar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE;
+
+        decorView.setSystemUiVisibility(uiOptions);
     }
 }
 

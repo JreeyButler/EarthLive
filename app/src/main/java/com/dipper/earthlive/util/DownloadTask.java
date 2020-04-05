@@ -41,7 +41,6 @@ public class DownloadTask implements Runnable {
         this.url = url;
         this.path = path;
         this.mCallback = callback;
-
     }
 
     @Override
@@ -100,6 +99,5 @@ public class DownloadTask implements Runnable {
         Log.d(TAG, "getFileName: file name = " + fileName);
         return fileName;
     }
-
 }
 

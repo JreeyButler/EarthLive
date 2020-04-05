@@ -30,15 +30,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.dipper.earthlive.R;
-import com.dipper.earthlive.model.VersionInfo;
+import com.dipper.earthlive.bean.VersionInfo;
 import com.dipper.earthlive.util.Constants;
 import com.dipper.earthlive.util.DownloadCallback;
 import com.dipper.earthlive.util.DownloadTask;
@@ -83,7 +84,6 @@ public class AboutActivity extends Activity implements View.OnClickListener,
         Button mFeedback = findViewById(R.id.feedback);
         Button mCheckUpdate = findViewById(R.id.check_update);
         String version = String.format(mContext.getResources().getString(R.string.version), getVersionName());
-        Log.d(TAG, "initView: version = " + version);
         mVersion.setText(version);
         mFeedback.setOnClickListener(this);
         mCheckUpdate.setOnClickListener(this);
@@ -136,12 +136,8 @@ public class AboutActivity extends Activity implements View.OnClickListener,
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                finish();
-                break;
-            default:
-                break;
+        if (id == android.R.id.home) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
